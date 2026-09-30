@@ -18,12 +18,15 @@ type InvitationLetterProps = {
   embedded?: boolean;
   /** Opening from the envelope — keep the top stable, no enter offset */
   fromEnvelope?: boolean;
+  /** Arm scroll reveals after the envelope layout projection has settled */
+  revealsReady?: boolean;
 };
 
 export function InvitationLetter({
   onClose,
   embedded = false,
   fromEnvelope = false,
+  revealsReady = true,
 }: InvitationLetterProps) {
   return (
     <div
@@ -67,7 +70,7 @@ export function InvitationLetter({
         {/* Portrait outside Reveal so parent transforms don't kill parallax */}
         <CouplePhoto />
 
-        <Reveal immediate={fromEnvelope}>
+        <Reveal enabled={revealsReady}>
           <section className="border-y border-[var(--line)] bg-surface-soft/80 px-4 py-10 sm:px-10">
             <p className="font-ui mb-6 text-center text-[0.7rem] tracking-[0.24em] text-accent uppercase">
               Αντίστροφη μέτρηση
@@ -77,7 +80,7 @@ export function InvitationLetter({
           </section>
         </Reveal>
 
-        <Reveal>
+        <Reveal enabled={revealsReady}>
           <LocationCard
             title={wedding.ceremony.title}
             subtitle={wedding.ceremony.subtitle}
@@ -94,7 +97,7 @@ export function InvitationLetter({
 
         <div className="divider" />
 
-        <Reveal>
+        <Reveal enabled={revealsReady}>
           <LocationCard
             title={wedding.reception.title}
             subtitle={wedding.reception.subtitle}
@@ -110,13 +113,13 @@ export function InvitationLetter({
 
         <div className="divider" />
 
-        <Reveal>
+        <Reveal enabled={revealsReady}>
           <Families />
         </Reveal>
 
         <div className="divider" />
 
-        <Reveal>
+        <Reveal enabled={revealsReady}>
           <section className="px-5 py-12 sm:px-10 sm:py-14">
             <h2 className="text-center text-[1.85rem] font-semibold tracking-wide text-ink sm:text-4xl">
               {wedding.prep.title}
@@ -142,13 +145,13 @@ export function InvitationLetter({
 
         <div className="divider" />
 
-        <Reveal>
+        <Reveal enabled={revealsReady}>
           <RsvpForm />
         </Reveal>
 
         <div className="divider" />
 
-        <Reveal>
+        <Reveal enabled={revealsReady}>
           <WishesForm />
         </Reveal>
 

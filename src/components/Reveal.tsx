@@ -9,6 +9,11 @@ type RevealProps = {
   delay?: number;
   /** Skip enter motion (e.g. hero already visible as the envelope expands) */
   immediate?: boolean;
+  /**
+   * When false, render static (used while a parent layout projection is active).
+   * Flip to true after the envelope settles so whileInView can track scroll cleanly.
+   */
+  enabled?: boolean;
 };
 
 export function Reveal({
@@ -16,11 +21,21 @@ export function Reveal({
   className,
   delay = 0,
   immediate = false,
+  enabled = true,
 }: RevealProps) {
   const reduceMotion = useReducedMotion();
 
   if (reduceMotion || immediate) {
     return <div className={className}>{children}</div>;
+  }
+
+  // Avoid arming IntersectionObserver under a layout-projected parent
+  if (!enabled) {
+    return (
+      <div className={className} style={{ opacity: 0 }}>
+        {children}
+      </div>
+    );
   }
 
   return (

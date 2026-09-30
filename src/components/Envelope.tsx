@@ -12,7 +12,12 @@ import {
 } from "@/lib/preload";
 
 const FLAP_MS = 640;
+/** Keep layout projection until the sheet has finished growing */
+const EXPAND_MS = 1000;
 const ease = [0.22, 1, 0.36, 1] as const;
+
+const ENVELOPE_BG = "#ebe4db";
+const LETTER_BG = "#fffcf8";
 
 type Phase = "idle" | "opening" | "open";
 
@@ -66,7 +71,8 @@ export function Envelope() {
     }
 
     setPhase("opening");
-    schedule(() => setPhase("open"), FLAP_MS);
+    // Drop layout transforms only after expand finishes so scroll reveals work again
+    schedule(() => setPhase("open"), EXPAND_MS);
   };
 
   const close = () => {
@@ -78,6 +84,8 @@ export function Envelope() {
   const idle = phase === "idle";
   const isOpen = phase !== "idle";
   const showFlap = phase === "opening";
+  // Layout projection only while morphing — it breaks whileInView if left on
+  const layoutActive = phase !== "open";
 
   return (
     <div className="atmosphere relative min-h-dvh overflow-x-hidden">
@@ -89,25 +97,33 @@ export function Envelope() {
         }
       >
         <motion.div
-          layout
+          layout={layoutActive}
           className={
             isOpen
               ? "relative mx-auto w-full max-w-xl"
               : "relative w-full max-w-[22rem] sm:max-w-md"
           }
-          transition={{ layout: { duration: 1, ease } }}
+          transition={{ layout: { duration: EXPAND_MS / 1000, ease } }}
         >
           <motion.div
-            layout
+            layout={layoutActive}
             className={
               isOpen
-                ? "relative w-full overflow-hidden bg-surface md:my-10 md:rounded-2xl md:shadow-[0_20px_60px_rgb(23_20_18/0.1)] md:ring-1 md:ring-black/5"
-                : "relative aspect-[3/4] w-full overflow-hidden rounded-[1.25rem] bg-surface shadow-[0_24px_60px_rgb(23_20_18/0.14)] ring-1 ring-black/5"
+                ? `relative w-full md:my-10 md:rounded-2xl md:shadow-[0_20px_60px_rgb(23_20_18/0.1)] md:ring-1 md:ring-black/5 ${
+                    phase === "opening" ? "overflow-hidden" : "overflow-x-clip"
+                  }`
+                : "relative aspect-[3/4] w-full overflow-hidden rounded-[1.25rem] shadow-[0_24px_60px_rgb(23_20_18/0.14)] ring-1 ring-black/5"
             }
-            transition={{ layout: { duration: 1, ease } }}
+            initial={false}
+            animate={{
+              backgroundColor: isOpen ? LETTER_BG : ENVELOPE_BG,
+            }}
+            transition={{
+              layout: { duration: EXPAND_MS / 1000, ease },
+              backgroundColor: { duration: 0.7, ease },
+            }}
             style={idle ? { perspective: 1400 } : undefined}
           >
-            {/* Closed envelope face — same surface color as the letter (no beige flash) */}
             <AnimatePresence>
               {idle ? (
                 <motion.div
@@ -123,7 +139,7 @@ export function Envelope() {
                     aria-label={wedding.openCta}
                     className="absolute inset-0 cursor-pointer touch-manipulation text-left"
                   >
-                    <div className="absolute inset-[9%] flex flex-col justify-end rounded-md bg-surface-soft/50 px-5 pb-7 pt-6 sm:inset-[10%] sm:px-6 sm:pb-8">
+                    <div className="absolute inset-[9%] flex flex-col justify-end rounded-md bg-surface px-5 pb-7 pt-6 sm:inset-[10%] sm:px-6 sm:pb-8">
                       <div className="text-center">
                         <p className="font-script text-2xl leading-snug text-ink sm:text-3xl">
                           {wedding.namesJoined}
@@ -136,20 +152,10 @@ export function Envelope() {
 
                     <div
                       aria-hidden
-                      className="pointer-events-none absolute inset-0 z-[12] opacity-40"
+                      className="pointer-events-none absolute inset-0 z-[15] opacity-40"
                       style={{
                         background:
                           "linear-gradient(to top right, transparent 46%, rgb(23 20 18 / 0.06) 50%, transparent 54%), linear-gradient(to top left, transparent 46%, rgb(23 20 18 / 0.06) 50%, transparent 54%)",
-                      }}
-                    />
-
-                    {/* Soft pocket rim — tint only, not a different fill */}
-                    <div
-                      aria-hidden
-                      className="pointer-events-none absolute inset-0 z-[11]"
-                      style={{
-                        background:
-                          "linear-gradient(180deg, rgb(232 226 218 / 0.55) 0%, transparent 38%)",
                       }}
                     />
 
@@ -159,7 +165,7 @@ export function Envelope() {
                         height: "46%",
                         clipPath: "polygon(0 0, 100% 0, 50% 100%)",
                         background:
-                          "linear-gradient(180deg, #fffcf8 0%, #f3ebe3 100%)",
+                          "linear-gradient(180deg, #f4eee6 0%, #e5ddd2 100%)",
                         boxShadow: "0 8px 20px rgb(23 20 18 / 0.08)",
                       }}
                     />
@@ -172,16 +178,11 @@ export function Envelope() {
               ) : null}
             </AnimatePresence>
 
-            {/* Letter mounts once and stays — height grows with content in one layout pass */}
             <AnimatePresence>
               {isOpen ? (
                 <motion.div
                   key="letter"
-                  initial={
-                    reduceMotion
-                      ? { opacity: 1 }
-                      : { opacity: 0.55 }
-                  }
+                  initial={reduceMotion ? { opacity: 1 } : { opacity: 0.55 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.45, ease }}
                 >
@@ -189,6 +190,7 @@ export function Envelope() {
                     onClose={close}
                     embedded
                     fromEnvelope
+                    revealsReady={phase === "open"}
                   />
                 </motion.div>
               ) : null}
@@ -203,7 +205,7 @@ export function Envelope() {
                     height: "13rem",
                     clipPath: "polygon(0 0, 100% 0, 50% 100%)",
                     background:
-                      "linear-gradient(180deg, #fffcf8 0%, #f3ebe3 100%)",
+                      "linear-gradient(180deg, #f4eee6 0%, #e5ddd2 100%)",
                     boxShadow: "0 10px 24px rgb(23 20 18 / 0.1)",
                     transformStyle: "preserve-3d",
                     backfaceVisibility: "hidden",
