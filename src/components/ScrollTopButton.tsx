@@ -19,7 +19,7 @@ export function ScrollTopButton() {
       type="button"
       aria-label="Επιστροφή στην κορυφή"
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      className="fixed bottom-[max(5.5rem,calc(env(safe-area-inset-bottom)+4.5rem))] right-[max(1.25rem,env(safe-area-inset-right))] z-50 flex h-11 w-11 touch-manipulation items-center justify-center rounded-sm bg-forest/70 text-cream shadow-lg backdrop-blur-sm transition hover:bg-forest"
+      className="fixed bottom-[max(5.5rem,calc(env(safe-area-inset-bottom)+4.5rem))] right-[max(1.25rem,env(safe-area-inset-right))] z-50 flex h-11 w-11 touch-manipulation items-center justify-center rounded-full bg-ink/55 text-surface backdrop-blur-sm transition hover:bg-ink"
     >
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
         <path

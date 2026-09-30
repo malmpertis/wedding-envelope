@@ -21,16 +21,16 @@ export function LocationCard({
   iconSrc,
 }: LocationCardProps) {
   return (
-    <section className="px-4 py-12 sm:px-10 sm:py-14">
+    <section className="px-5 py-12 sm:px-10 sm:py-14">
       <div className="mx-auto flex max-w-lg flex-col items-center text-center">
         <img
           src={iconSrc}
           alt=""
           width={56}
           height={56}
-          className="mb-5 text-ink opacity-80"
+          className="mb-5 opacity-70"
         />
-        <h2 className="font-serif text-[1.85rem] font-semibold tracking-wide text-ink sm:text-4xl">
+        <h2 className="text-[1.85rem] font-semibold tracking-wide text-ink sm:text-4xl">
           {title}
         </h2>
         {subtitle ? (
@@ -38,12 +38,12 @@ export function LocationCard({
             {subtitle}
           </p>
         ) : null}
-        <p className="mt-5 font-serif text-xl text-ink sm:text-2xl">{place}</p>
-        <p className="mt-1 text-sm leading-relaxed tracking-wide text-ink-soft sm:text-base">
+        <p className="mt-5 text-xl text-ink sm:text-2xl">{place}</p>
+        <p className="mt-1 text-sm leading-relaxed text-ink-soft sm:text-base">
           {detail}
         </p>
 
-        <div className="map-frame mt-8 w-full overflow-hidden rounded-sm bg-cream-warm">
+        <div className="map-frame mt-8 w-full bg-surface-soft">
           <iframe
             title={place}
             src={embedUrl}

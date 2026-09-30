@@ -6,7 +6,7 @@ import { Envelope } from "@/components/Envelope";
 export default function Home() {
   return (
     <AudioProvider>
-      <main className="min-h-dvh bg-forest-deep">
+      <main className="min-h-dvh">
         <Envelope />
         <MuteButton />
       </main>

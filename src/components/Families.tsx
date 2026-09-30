@@ -3,35 +3,30 @@ import { wedding } from "@/content/wedding";
 export function Families() {
   return (
     <>
-      <section className="px-4 py-12 sm:px-10 sm:py-16">
+      <section className="px-5 py-12 sm:px-10 sm:py-16">
         <div className="mx-auto max-w-lg text-center">
           <img
             src="/icons/rings.svg"
             alt=""
             width={64}
             height={40}
-            className="mx-auto mb-6 opacity-80"
+            className="mx-auto mb-6 opacity-70"
           />
-          <h2 className="font-serif text-[1.85rem] font-semibold tracking-wide text-ink sm:text-4xl">
+          <h2 className="text-[1.85rem] font-semibold tracking-wide text-ink sm:text-4xl">
             {wedding.families.title}
           </h2>
 
-          <div className="mt-10 space-y-8">
-            <div>
-              <h3 className="text-sm font-semibold text-ink">
-                {wedding.families.groomSide.title}
-              </h3>
-              <ul className="mt-3 space-y-2">
-                {wedding.families.groomSide.members.map((name) => (
-                  <li
-                    key={name}
-                    className="font-serif text-lg text-ink-soft sm:text-xl"
-                  >
-                    {name}
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <div className="mt-10">
+            <h3 className="font-ui text-sm font-semibold tracking-wide text-ink">
+              {wedding.families.groomSide.title}
+            </h3>
+            <ul className="mt-3 space-y-2">
+              {wedding.families.groomSide.members.map((name) => (
+                <li key={name} className="text-lg text-ink-soft sm:text-xl">
+                  {name}
+                </li>
+              ))}
+            </ul>
           </div>
 
           <p className="mt-8 text-sm leading-relaxed text-ink-soft sm:text-base">
@@ -40,19 +35,16 @@ export function Families() {
         </div>
       </section>
 
-      <div className="mx-auto h-px w-24 bg-gold/50" />
+      <div className="divider" />
 
-      <section className="px-4 py-12 sm:px-10 sm:py-16">
+      <section className="px-5 py-12 sm:px-10 sm:py-16">
         <div className="mx-auto max-w-lg text-center">
-          <h2 className="font-serif text-[1.85rem] font-semibold tracking-wide text-ink sm:text-4xl">
+          <h2 className="text-[1.85rem] font-semibold tracking-wide text-ink sm:text-4xl">
             {wedding.families.koumparoi.title}
           </h2>
           <ul className="mt-6 space-y-2">
             {wedding.families.koumparoi.members.map((name) => (
-              <li
-                key={name}
-                className="font-serif text-lg text-ink sm:text-xl"
-              >
+              <li key={name} className="text-lg text-ink sm:text-xl">
                 {name}
               </li>
             ))}

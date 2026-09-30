@@ -8,11 +8,11 @@ import { Families } from "@/components/Families";
 import { RsvpForm, WishesForm } from "@/components/GuestForms";
 import { LocationCard } from "@/components/LocationCard";
 import { MapButton } from "@/components/MapButton";
+import { Monogram } from "@/components/Monogram";
 import { ScrollTopButton } from "@/components/ScrollTopButton";
-import { WaxSeal } from "@/components/WaxSeal";
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
+  hidden: { opacity: 0, y: 24 },
   show: { opacity: 1, y: 0 },
 };
 
@@ -23,66 +23,54 @@ type InvitationLetterProps = {
 export function InvitationLetter({ onClose }: InvitationLetterProps) {
   return (
     <motion.div
-      className="relative mx-auto min-h-dvh w-full max-w-xl overflow-x-hidden md:my-6 md:shadow-[0_24px_80px_rgba(0,0,0,0.35)]"
-      initial={{ opacity: 0, y: 40 }}
+      className="relative mx-auto min-h-dvh w-full max-w-xl overflow-x-hidden bg-surface md:my-10 md:min-h-0 md:rounded-2xl md:shadow-[0_20px_60px_rgb(23_20_18/0.1)] md:ring-1 md:ring-black/5"
+      initial={{ opacity: 0, y: 36 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
     >
-      <div
-        aria-hidden
-        className="relative h-24 bg-forest sm:h-28"
-        style={{ clipPath: "polygon(0 0, 100% 0, 100% 55%, 50% 100%, 0 55%)" }}
-      >
-        <div className="gold-border-strip absolute inset-x-0 top-0 h-4 opacity-80" />
-        <div className="absolute left-1/2 top-[58%] -translate-x-1/2 -translate-y-1/2 drop-shadow-lg">
-          <WaxSeal size={80} className="h-20 w-20" />
-        </div>
-      </div>
-
-      <div className="letter-surface relative -mt-6 pb-20 text-ink shadow-[0_-8px_40px_rgba(0,0,0,0.18)]">
-        <div className="flex justify-end px-4 pt-4 sm:px-8">
+      <div className="letter-surface relative pb-16 text-ink">
+        <div className="flex items-center justify-between px-5 pt-5 sm:px-8">
+          <Monogram size={52} />
           <button
             type="button"
             onClick={onClose}
-            className="min-h-10 touch-manipulation px-3 text-xs tracking-[0.16em] text-ink-soft uppercase transition hover:text-forest"
+            className="font-ui min-h-10 touch-manipulation px-2 text-xs tracking-[0.16em] text-ink-soft uppercase transition hover:text-ink"
           >
             {wedding.closeEnvelope}
           </button>
         </div>
 
         <motion.section
-          className="chevron-bottom relative px-4 pb-16 pt-8 text-center sm:px-10 sm:pb-20"
+          className="relative px-5 pb-14 pt-8 text-center sm:px-10 sm:pb-16"
           variants={fadeUp}
           initial="hidden"
           animate="show"
-          transition={{ duration: 0.7, delay: 0.15 }}
+          transition={{ duration: 0.7, delay: 0.1 }}
         >
-          <p className="text-xs tracking-[0.28em] text-gold-dark uppercase">
+          <p className="font-ui text-[0.7rem] tracking-[0.28em] text-accent uppercase">
             Πρόσκληση γάμου
           </p>
-          <h1 className="mt-4 font-script text-[2.6rem] leading-[1.15] text-ink sm:text-6xl">
+          <h1 className="mt-4 font-script text-[2.75rem] leading-[1.12] text-ink sm:text-6xl">
             {wedding.namesJoined}
           </h1>
-          <p className="mx-auto mt-5 max-w-md font-serif text-lg leading-relaxed text-ink-soft sm:text-xl">
+          <p className="mx-auto mt-5 max-w-md text-lg leading-relaxed text-ink-soft sm:text-xl">
             {wedding.heroLine}
           </p>
-          <p className="mt-6 font-serif text-2xl tracking-wide text-ink sm:text-3xl">
+          <p className="mt-6 text-2xl tracking-wide text-ink sm:text-3xl">
             {wedding.dateDisplay}
           </p>
           <CouplePhoto />
         </motion.section>
 
-        <section className="border-y border-gold/25 bg-cream-warm/60 px-3 py-10 sm:px-10">
-          <p className="mb-6 text-center text-xs tracking-[0.24em] text-gold-dark uppercase">
+        <section className="border-y border-[var(--line)] bg-surface-soft/80 px-4 py-10 sm:px-10">
+          <p className="font-ui mb-6 text-center text-[0.7rem] tracking-[0.24em] text-accent uppercase">
             Αντίστροφη μέτρηση
           </p>
           <Countdown />
-          <p className="mt-6 text-center font-serif text-lg text-ink">
-            {wedding.dateShort}
-          </p>
+          <p className="mt-6 text-center text-lg text-ink">{wedding.dateShort}</p>
         </section>
 
-        <div className="mx-auto h-px w-24 bg-gold/50" />
+        <div className="divider my-2" />
 
         <LocationCard
           title={wedding.ceremony.title}
@@ -94,7 +82,7 @@ export function InvitationLetter({ onClose }: InvitationLetterProps) {
           iconSrc="/icons/church.svg"
         />
 
-        <div className="mx-auto h-px w-24 bg-gold/50" />
+        <div className="divider" />
 
         <LocationCard
           title={wedding.reception.title}
@@ -106,14 +94,14 @@ export function InvitationLetter({ onClose }: InvitationLetterProps) {
           iconSrc="/icons/venue.svg"
         />
 
-        <div className="mx-auto h-px w-24 bg-gold/50" />
+        <div className="divider" />
 
         <Families />
 
-        <div className="mx-auto h-px w-24 bg-gold/50" />
+        <div className="divider" />
 
-        <section className="px-4 py-12 sm:px-10 sm:py-14">
-          <h2 className="text-center font-serif text-[1.85rem] font-semibold tracking-wide text-ink sm:text-4xl">
+        <section className="px-5 py-12 sm:px-10 sm:py-14">
+          <h2 className="text-center text-[1.85rem] font-semibold tracking-wide text-ink sm:text-4xl">
             {wedding.prep.title}
           </h2>
           <div className="mt-10 space-y-12">
@@ -134,37 +122,27 @@ export function InvitationLetter({ onClose }: InvitationLetterProps) {
           </div>
         </section>
 
-        <div className="mx-auto h-px w-24 bg-gold/50" />
+        <div className="divider" />
 
         <RsvpForm />
 
-        <div className="mx-auto h-px w-24 bg-gold/50" />
+        <div className="divider" />
 
         <WishesForm />
 
-        <footer className="px-6 pb-10 pt-4 text-center">
+        <footer className="px-6 pb-8 pt-6 text-center">
           <p className="font-script text-3xl text-ink">{wedding.namesJoined}</p>
-          <p className="mt-2 text-sm tracking-[0.18em] text-ink-soft">
+          <p className="font-ui mt-2 text-sm tracking-[0.18em] text-ink-soft">
             {wedding.dateDisplay}
           </p>
           <button
             type="button"
             onClick={onClose}
-            className="mt-6 min-h-11 touch-manipulation text-sm tracking-[0.16em] text-forest uppercase"
+            className="font-ui mt-6 min-h-11 touch-manipulation text-sm tracking-[0.16em] text-accent uppercase"
           >
             {wedding.backToEnvelope}
           </button>
         </footer>
-      </div>
-
-      <div
-        aria-hidden
-        className="relative h-20 bg-forest sm:h-24"
-        style={{
-          clipPath: "polygon(0 45%, 50% 0, 100% 45%, 100% 100%, 0 100%)",
-        }}
-      >
-        <div className="gold-border-strip absolute inset-x-0 bottom-0 h-4 opacity-80" />
       </div>
 
       <ScrollTopButton />
@@ -187,10 +165,10 @@ function PrepBlock({
 }) {
   return (
     <div className="mx-auto max-w-lg text-center">
-      <h3 className="font-serif text-2xl text-ink sm:text-3xl">{title}</h3>
+      <h3 className="text-2xl text-ink sm:text-3xl">{title}</h3>
       <p className="mt-3 text-base text-ink-soft">{blurb}</p>
-      <p className="mt-3 font-serif text-lg text-ink">{address}</p>
-      <div className="map-frame mt-6 overflow-hidden rounded-sm">
+      <p className="mt-3 text-lg text-ink">{address}</p>
+      <div className="map-frame mt-6">
         <iframe
           title={title}
           src={embedUrl}

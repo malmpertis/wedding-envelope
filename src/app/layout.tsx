@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0f241c",
+  themeColor: "#f3efe9",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -36,11 +36,11 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap&subset=greek,latin,latin-ext"
+          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Source+Sans+3:wght@400;500;600&display=swap&subset=greek,latin,latin-ext"
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-full font-serif">{children}</body>
+      <body className="min-h-full font-display">{children}</body>
     </html>
   );
 }
