@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="24" viewBox="0 0 240 24" fill="none">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e0c988"/>
+      <stop offset="50%" stop-color="#c5a35a"/>
+      <stop offset="100%" stop-color="#9a7a3a"/>
+    </linearGradient>
+  </defs>
+  <g stroke="url(#g)" stroke-width="1.2" fill="none">
+    <path d="M0 12 H240"/>
+    <path d="M8 4 L16 12 L8 20 L0 12 Z"/>
+    <path d="M32 4 L40 12 L32 20 L24 12 Z"/>
+    <path d="M56 4 L64 12 L56 20 L48 12 Z"/>
+    <path d="M80 4 L88 12 L80 20 L72 12 Z"/>
+    <path d="M104 4 L112 12 L104 20 L96 12 Z"/>
+    <path d="M128 4 L136 12 L128 20 L120 12 Z"/>
+    <path d="M152 4 L160 12 L152 20 L144 12 Z"/>
+    <path d="M176 4 L184 12 L176 20 L168 12 Z"/>
+    <path d="M200 4 L208 12 L200 20 L192 12 Z"/>
+    <path d="M224 4 L232 12 L224 20 L216 12 Z"/>
+    <rect x="10" y="8" width="8" height="8" transform="rotate(45 14 12)" stroke-width="0.9"/>
+    <rect x="58" y="8" width="8" height="8" transform="rotate(45 62 12)" stroke-width="0.9"/>
+    <rect x="106" y="8" width="8" height="8" transform="rotate(45 110 12)" stroke-width="0.9"/>
+    <rect x="154" y="8" width="8" height="8" transform="rotate(45 158 12)" stroke-width="0.9"/>
+    <rect x="202" y="8" width="8" height="8" transform="rotate(45 206 12)" stroke-width="0.9"/>
+  </g>
+</svg>

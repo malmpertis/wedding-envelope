@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+:root {
+  --forest: #1b3a2f;
+  --forest-deep: #0f241c;
+  --forest-mid: #234a3b;
+  --cream: #f3f1ec;
+  --cream-warm: #ebe6dc;
+  --gold: #c5a35a;
+  --gold-light: #e0c988;
+  --gold-dark: #9a7a3a;
+  --ink: #1a1a18;
+  --ink-soft: #4a4a44;
+  --background: var(--forest-deep);
+  --foreground: var(--cream);
+  --font-cormorant: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+}
+
+@theme inline {
+  --color-forest: var(--forest);
+  --color-forest-deep: var(--forest-deep);
+  --color-forest-mid: var(--forest-mid);
+  --color-cream: var(--cream);
+  --color-cream-warm: var(--cream-warm);
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-gold-dark: var(--gold-dark);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-serif: var(--font-cormorant);
+  --font-script: var(--font-cormorant);
+  --font-sans: var(--font-cormorant);
+}
+
+.font-script {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--forest-deep);
+  color: var(--ink);
+  font-family: var(--font-cormorant), "Georgia", serif;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--gold) 45%, transparent);
+  color: var(--ink);
+}
+
+.letter-surface {
+  background:
+    radial-gradient(
+      ellipse 120% 80% at 50% 0%,
+      #faf8f3 0%,
+      var(--cream) 45%,
+      var(--cream-warm) 100%
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgb(0 0 0 / 0.012) 3px,
+      rgb(0 0 0 / 0.012) 4px
+    );
+}
+
+.gold-border-strip {
+  background-image: url("/borders/gold-geo.svg");
+  background-repeat: repeat-x;
+  background-size: auto 100%;
+  background-position: center;
+}
+
+.chevron-top {
+  clip-path: polygon(0 18%, 50% 0, 100% 18%, 100% 100%, 0 100%);
+}
+
+.chevron-bottom {
+  clip-path: polygon(0 0, 100% 0, 100% 82%, 50% 100%, 0 82%);
+}
+
+.map-frame {
+  border: 1px solid color-mix(in srgb, var(--gold) 55%, transparent);
+  box-shadow: 0 12px 40px rgb(15 36 28 / 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
