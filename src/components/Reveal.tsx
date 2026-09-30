@@ -7,12 +7,19 @@ type RevealProps = {
   children: ReactNode;
   className?: string;
   delay?: number;
+  /** Skip enter motion (e.g. hero already visible as the envelope expands) */
+  immediate?: boolean;
 };
 
-export function Reveal({ children, className, delay = 0 }: RevealProps) {
+export function Reveal({
+  children,
+  className,
+  delay = 0,
+  immediate = false,
+}: RevealProps) {
   const reduceMotion = useReducedMotion();
 
-  if (reduceMotion) {
+  if (reduceMotion || immediate) {
     return <div className={className}>{children}</div>;
   }
 

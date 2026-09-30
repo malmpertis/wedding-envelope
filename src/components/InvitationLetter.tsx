@@ -16,17 +16,20 @@ type InvitationLetterProps = {
   onClose: () => void;
   /** When true, shell chrome is provided by Envelope’s expanding sheet */
   embedded?: boolean;
+  /** Opening from the envelope — keep the top stable, no enter offset */
+  fromEnvelope?: boolean;
 };
 
 export function InvitationLetter({
   onClose,
   embedded = false,
+  fromEnvelope = false,
 }: InvitationLetterProps) {
   return (
     <div
       className={
         embedded
-          ? "relative min-h-dvh w-full overflow-x-clip md:min-h-0"
+          ? "relative w-full overflow-x-clip"
           : "relative mx-auto min-h-dvh w-full max-w-xl overflow-x-clip bg-surface md:my-10 md:min-h-0 md:rounded-2xl md:shadow-[0_20px_60px_rgb(23_20_18/0.1)] md:ring-1 md:ring-black/5"
       }
     >
@@ -43,7 +46,10 @@ export function InvitationLetter({
         </div>
 
         {/* Brand-first hero — names lead before imagery */}
-        <Reveal className="relative px-5 pb-10 pt-10 text-center sm:px-10 sm:pb-12 sm:pt-14">
+        <Reveal
+          immediate={fromEnvelope}
+          className="relative px-5 pb-10 pt-10 text-center sm:px-10 sm:pb-12 sm:pt-14"
+        >
           <p className="font-ui text-[0.7rem] tracking-[0.28em] text-accent uppercase">
             Πρόσκληση γάμου
           </p>
@@ -61,7 +67,7 @@ export function InvitationLetter({
         {/* Portrait outside Reveal so parent transforms don't kill parallax */}
         <CouplePhoto />
 
-        <Reveal>
+        <Reveal immediate={fromEnvelope}>
           <section className="border-y border-[var(--line)] bg-surface-soft/80 px-4 py-10 sm:px-10">
             <p className="font-ui mb-6 text-center text-[0.7rem] tracking-[0.24em] text-accent uppercase">
               Αντίστροφη μέτρηση
