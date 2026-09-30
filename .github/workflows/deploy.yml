@@ -31,6 +31,10 @@ jobs:
         run: npm ci
 
       - name: Build static export
+        env:
+          # Project site: https://malmpertis.github.io/wedding-envelope/
+          # For a custom apex domain later, remove this env (or set GITHUB_PAGES=false).
+          GITHUB_PAGES: "true"
         run: npm run build
 
       - name: Upload Pages artifact
