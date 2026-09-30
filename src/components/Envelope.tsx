@@ -244,8 +244,7 @@ export function Envelope() {
                     style={{
                       height: "13rem",
                       clipPath: "polygon(0 0, 100% 0, 50% 100%)",
-                      background:
-                        "linear-gradient(180deg, #f4eee6 0%, #e5ddd2 100%)",
+                      background: `linear-gradient(180deg, #f4eee6 0%, ${ENVELOPE_BG} 100%)`,
                       boxShadow: "0 10px 24px rgb(23 20 18 / 0.1)",
                       transformStyle: "preserve-3d",
                       backfaceVisibility: "hidden",
@@ -383,14 +382,11 @@ function ClosedEnvelopeFace({
 }) {
   const inner = (
     <>
-      {/* Darker envelope paper lives only on this chrome layer — sheet stay surface */}
-      <div
-        aria-hidden
-        className="absolute inset-0"
-        style={{ backgroundColor: ENVELOPE_BG }}
-      />
-
-      <div className="absolute inset-[9%] flex flex-col justify-end rounded-md bg-surface px-5 pb-7 pt-6 sm:inset-[10%] sm:px-6 sm:pb-8">
+      {/*
+        Card body uses the same surface as the open letter.
+        Only the flap is the darker beige — no full-card fill swap on open.
+      */}
+      <div className="absolute inset-[9%] flex flex-col justify-end rounded-md px-5 pb-7 pt-6 sm:inset-[10%] sm:px-6 sm:pb-8">
         <div className="text-center">
           <p className="font-script text-2xl leading-snug text-ink sm:text-3xl">
             {wedding.namesJoined}
@@ -417,7 +413,7 @@ function ClosedEnvelopeFace({
             style={{
               height: "46%",
               clipPath: "polygon(0 0, 100% 0, 50% 100%)",
-              background: "linear-gradient(180deg, #f4eee6 0%, #e5ddd2 100%)",
+              background: `linear-gradient(180deg, #f4eee6 0%, ${ENVELOPE_BG} 100%)`,
               boxShadow: "0 8px 20px rgb(23 20 18 / 0.08)",
             }}
           />
