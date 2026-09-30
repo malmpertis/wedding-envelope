@@ -41,7 +41,7 @@ export function Monogram({ className = "", size = 112 }: MonogramProps) {
         fill="#171412"
         letterSpacing="0.04em"
       >
-        Ι · Β
+        Β · Ι
       </text>
     </svg>
   );

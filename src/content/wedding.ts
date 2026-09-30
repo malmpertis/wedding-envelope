@@ -1,7 +1,7 @@
 export const wedding = {
   bride: "Ιωάννα",
   groom: "Βασίλης",
-  namesJoined: "Ιωάννα & Βασίλης",
+  namesJoined: "Βασίλης & Ιωάννα",
   /** Europe/Athens — add time when known, e.g. 2027-09-11T17:00:00+03:00 */
   dateISO: "2027-09-11T00:00:00+03:00",
   dateDisplay: "11 Σεπτεμβρίου 2027",

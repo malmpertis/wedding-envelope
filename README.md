@@ -1,4 +1,4 @@
-# Ιωάννα & Βασίλης — Πρόσκληση Γάμου
+# Βασίλης & Ιωάννα — Πρόσκληση Γάμου
 
 Greek wedding invitation site with a forest-green envelope open animation, countdown, family details, and maps for the church, prep addresses, and reception.
 
