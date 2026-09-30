@@ -221,12 +221,10 @@ export function Envelope() {
                 {showLetter ? (
                   <motion.div
                     key="letter"
-                    initial={
-                      reduceMotion ? { opacity: 1 } : { opacity: 0.55 }
-                    }
+                    // Keep the paper fully opaque — a translucent letter lets the
+                    // warmer atmosphere bleed through, then “snaps” lighter when settled.
+                    initial={false}
                     animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.45, ease }}
                   >
                     <InvitationLetter
                       onClose={close}
