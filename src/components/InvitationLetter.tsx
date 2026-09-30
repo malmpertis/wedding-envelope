@@ -8,9 +8,17 @@ import { Families } from "@/components/Families";
 import { RsvpForm, WishesForm } from "@/components/GuestForms";
 import { LocationCard } from "@/components/LocationCard";
 import { MapButton } from "@/components/MapButton";
+import { MapEmbed, MapWarmup } from "@/components/MapEmbed";
 import { Monogram } from "@/components/Monogram";
 import { Reveal } from "@/components/Reveal";
 import { ScrollTopButton } from "@/components/ScrollTopButton";
+
+const MAP_EMBED_URLS = [
+  wedding.ceremony.embedUrl,
+  wedding.reception.embedUrl,
+  wedding.prep.groom.embedUrl,
+  wedding.prep.bride.embedUrl,
+] as const;
 
 type InvitationLetterProps = {
   onClose: () => void;
@@ -25,6 +33,7 @@ export function InvitationLetter({ onClose }: InvitationLetterProps) {
       transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
     >
       <div className="letter-surface relative pb-16 text-ink">
+        <MapWarmup urls={MAP_EMBED_URLS} />
         <div className="flex items-center justify-between px-5 pt-5 sm:px-8">
           <Monogram size={48} />
           <button
@@ -175,15 +184,8 @@ function PrepBlock({
       <h3 className="text-2xl text-ink sm:text-3xl">{title}</h3>
       <p className="mt-3 text-base text-ink-soft">{blurb}</p>
       <p className="mt-3 text-lg text-ink">{address}</p>
-      <div className="map-frame mt-6">
-        <iframe
-          title={title}
-          src={embedUrl}
-          className="h-48 w-full border-0 sm:h-56"
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          allowFullScreen
-        />
+      <div className="mt-6">
+        <MapEmbed title={title} src={embedUrl} className="h-48 sm:h-56" />
       </div>
       <MapButton href={mapsUrl} label={wedding.mapLabel} />
     </div>

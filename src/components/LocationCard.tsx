@@ -1,4 +1,5 @@
 import { MapButton } from "@/components/MapButton";
+import { MapEmbed } from "@/components/MapEmbed";
 import { wedding } from "@/content/wedding";
 
 type LocationCardProps = {
@@ -43,15 +44,8 @@ export function LocationCard({
           {detail}
         </p>
 
-        <div className="map-frame mt-8 w-full bg-surface-soft">
-          <iframe
-            title={place}
-            src={embedUrl}
-            className="h-52 w-full border-0 sm:h-64"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            allowFullScreen
-          />
+        <div className="mt-8 w-full">
+          <MapEmbed title={place} src={embedUrl} />
         </div>
 
         <MapButton href={mapsUrl} label={wedding.mapLabel} />
