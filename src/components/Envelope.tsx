@@ -18,6 +18,9 @@ const ease = [0.22, 1, 0.36, 1] as const;
 
 const ENVELOPE_BG = "#ebe4db";
 const LETTER_BG = "#fffcf8";
+/** Tight card lift — large blur blooms into a beige vignette as the sheet grows */
+const SHADOW_ENVELOPE = "0 22px 44px rgb(23 20 18 / 0.12)";
+const SHADOW_LETTER = "0 14px 32px rgb(23 20 18 / 0.08)";
 
 type Phase = "idle" | "opening" | "open" | "closing";
 
@@ -197,10 +200,14 @@ export function Envelope() {
               }
               initial={false}
               animate={{
-                // Same floating card shadow closed + open — only the shape changes
-                boxShadow: "0 24px 60px rgb(23 20 18 / 0.14)",
+                // Drop blur quickly on open so the expanding sheet doesn’t cast a
+                // growing radial “beige to white” wash behind the letter.
+                boxShadow: sheetExpanded ? SHADOW_LETTER : SHADOW_ENVELOPE,
               }}
-              transition={{ layout: { duration: EXPAND_MS / 1000, ease } }}
+              transition={{
+                layout: { duration: EXPAND_MS / 1000, ease },
+                boxShadow: { duration: 0.4, ease },
+              }}
               style={idle || showOpeningFlap ? { perspective: 1400 } : undefined}
             >
               <AnimatePresence>
@@ -219,13 +226,7 @@ export function Envelope() {
 
               <AnimatePresence>
                 {showLetter ? (
-                  <motion.div
-                    key="letter"
-                    // Keep the paper fully opaque — a translucent letter lets the
-                    // warmer atmosphere bleed through, then “snaps” lighter when settled.
-                    initial={false}
-                    animate={{ opacity: 1 }}
-                  >
+                  <motion.div key="letter" initial={false} animate={{ opacity: 1 }}>
                     <InvitationLetter
                       onClose={close}
                       embedded
