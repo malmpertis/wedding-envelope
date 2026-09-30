@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { wedding } from "@/content/wedding";
 
 type Remaining = {
@@ -23,15 +23,42 @@ function getRemaining(targetMs: number): Remaining {
 
 export function Countdown() {
   const targetMs = new Date(wedding.dateISO).getTime();
+  const rootRef = useRef<HTMLDivElement>(null);
   const [remaining, setRemaining] = useState<Remaining>(() =>
     getRemaining(targetMs),
   );
 
   useEffect(() => {
-    const id = window.setInterval(() => {
-      setRemaining(getRemaining(targetMs));
-    }, 1000);
-    return () => window.clearInterval(id);
+    const root = rootRef.current;
+    if (!root) return;
+
+    let id = 0;
+    const tick = () => setRemaining(getRemaining(targetMs));
+
+    const start = () => {
+      if (id) return;
+      tick();
+      id = window.setInterval(tick, 1000);
+    };
+    const stop = () => {
+      if (!id) return;
+      window.clearInterval(id);
+      id = 0;
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) start();
+        else stop();
+      },
+      { rootMargin: "80px 0px" },
+    );
+    observer.observe(root);
+
+    return () => {
+      stop();
+      observer.disconnect();
+    };
   }, [targetMs]);
 
   const items = [
@@ -42,7 +69,11 @@ export function Countdown() {
   ];
 
   return (
-    <div className="grid grid-cols-4 gap-1.5 xs:gap-2 sm:gap-4" aria-live="polite">
+    <div
+      ref={rootRef}
+      className="grid grid-cols-4 gap-1.5 xs:gap-2 sm:gap-4"
+      aria-live="polite"
+    >
       {items.map((item) => (
         <div key={item.label} className="min-w-0 text-center">
           <div className="text-[1.65rem] font-semibold tracking-tight text-ink sm:text-4xl md:text-5xl">

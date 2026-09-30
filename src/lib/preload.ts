@@ -23,14 +23,26 @@ function loadImage(src: string): Promise<void> {
   return new Promise((resolve) => {
     const img = new Image();
     img.decoding = "async";
-    img.onload = () => resolve();
+
+    const finish = () => {
+      if (typeof img.decode === "function") {
+        void img
+          .decode()
+          .catch(() => undefined)
+          .finally(() => resolve());
+        return;
+      }
+      resolve();
+    };
+
+    img.onload = finish;
     img.onerror = () => resolve();
     img.src = src;
-    if (img.complete) resolve();
+    if (img.complete) finish();
   });
 }
 
-/** Couple photo + caption — gate opening on these */
+/** Couple photo + caption — warm + decode before / during first open */
 export function preloadCriticalAssets(): Promise<void> {
   if (typeof window === "undefined") return Promise.resolve();
   return Promise.all(CRITICAL_IMAGES.map(loadImage)).then(() => undefined);

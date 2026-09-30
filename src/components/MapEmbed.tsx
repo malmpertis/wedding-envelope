@@ -25,7 +25,7 @@ export function MapEmbed({
         width={1125}
         height={600}
         decoding="async"
-        loading="eager"
+        loading="lazy"
         draggable={false}
         className="pointer-events-none h-full w-full select-none object-cover object-center"
       />

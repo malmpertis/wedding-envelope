@@ -20,6 +20,11 @@ type InvitationLetterProps = {
   fromEnvelope?: boolean;
   /** Arm scroll reveals after the envelope layout projection has settled */
   revealsReady?: boolean;
+  /**
+   * Mount maps/forms/etc only after the open morph settles so the first
+   * open animation isn’t competing with a huge React + image decode spike.
+   */
+  mountBody?: boolean;
 };
 
 export function InvitationLetter({
@@ -27,6 +32,7 @@ export function InvitationLetter({
   embedded = false,
   fromEnvelope = false,
   revealsReady = true,
+  mountBody = true,
 }: InvitationLetterProps) {
   return (
     <div
@@ -70,149 +76,157 @@ export function InvitationLetter({
         {/* Portrait outside Reveal so parent transforms don't kill parallax */}
         <CouplePhoto />
 
-        <Reveal enabled={revealsReady}>
-          <section className="border-y border-[var(--line)] bg-surface-soft/80 px-4 py-10 sm:px-10">
-            <p className="font-ui mb-6 text-center text-[0.7rem] tracking-[0.24em] text-accent uppercase">
-              Αντίστροφη μέτρηση
-            </p>
-            <Countdown />
-            <p className="mt-6 text-center text-lg text-ink">{wedding.dateShort}</p>
-          </section>
-        </Reveal>
+        {mountBody ? (
+          <div className="[content-visibility:auto] [contain-intrinsic-size:1px_2400px]">
+            <Reveal enabled={revealsReady}>
+              <section className="border-y border-[var(--line)] bg-surface-soft/80 px-4 py-10 sm:px-10">
+                <p className="font-ui mb-6 text-center text-[0.7rem] tracking-[0.24em] text-accent uppercase">
+                  Αντίστροφη μέτρηση
+                </p>
+                <Countdown />
+                <p className="mt-6 text-center text-lg text-ink">
+                  {wedding.dateShort}
+                </p>
+              </section>
+            </Reveal>
 
-        <Reveal enabled={revealsReady}>
-          <LocationCard
-            title={wedding.ceremony.title}
-            subtitle={wedding.ceremony.subtitle}
-            place={wedding.ceremony.place}
-            detail={wedding.ceremony.detail}
-            photo={wedding.ceremony.photo}
-            photoAspect="aspect-[4/5] sm:aspect-[5/4]"
-            photoPosition="center 18%"
-            mapImage={wedding.ceremony.mapImage}
-            mapsUrl={wedding.ceremony.mapsUrl}
-            iconSrc="/icons/church.svg"
-          />
-        </Reveal>
-
-        <div className="divider" />
-
-        <Reveal enabled={revealsReady}>
-          <LocationCard
-            title={wedding.reception.title}
-            subtitle={wedding.reception.subtitle}
-            place={wedding.reception.place}
-            detail={wedding.reception.detail}
-            photo={wedding.reception.photo}
-            photoAspect="aspect-[5/3]"
-            mapImage={wedding.reception.mapImage}
-            mapsUrl={wedding.reception.mapsUrl}
-            iconSrc="/icons/venue.svg"
-          />
-        </Reveal>
-
-        <div className="divider" />
-
-        <Reveal enabled={revealsReady}>
-          <Families />
-        </Reveal>
-
-        <div className="divider" />
-
-        <Reveal enabled={revealsReady}>
-          <section className="px-5 py-12 sm:px-10 sm:py-14">
-            <h2 className="text-center text-[1.85rem] font-semibold tracking-wide text-ink sm:text-4xl">
-              {wedding.prep.title}
-            </h2>
-            <div className="mt-10 space-y-12">
-              <PrepBlock
-                title={wedding.prep.groom.title}
-                blurb={wedding.prep.groom.blurb}
-                address={wedding.prep.groom.address}
-                mapImage={wedding.prep.groom.mapImage}
-                mapsUrl={wedding.prep.groom.mapsUrl}
+            <Reveal enabled={revealsReady}>
+              <LocationCard
+                title={wedding.ceremony.title}
+                subtitle={wedding.ceremony.subtitle}
+                place={wedding.ceremony.place}
+                detail={wedding.ceremony.detail}
+                photo={wedding.ceremony.photo}
+                photoAspect="aspect-[4/5] sm:aspect-[5/4]"
+                photoPosition="center 18%"
+                mapImage={wedding.ceremony.mapImage}
+                mapsUrl={wedding.ceremony.mapsUrl}
+                iconSrc="/icons/church.svg"
               />
-              <PrepBlock
-                title={wedding.prep.bride.title}
-                blurb={wedding.prep.bride.blurb}
-                address={wedding.prep.bride.address}
-                mapImage={wedding.prep.bride.mapImage}
-                mapsUrl={wedding.prep.bride.mapsUrl}
+            </Reveal>
+
+            <div className="divider" />
+
+            <Reveal enabled={revealsReady}>
+              <LocationCard
+                title={wedding.reception.title}
+                subtitle={wedding.reception.subtitle}
+                place={wedding.reception.place}
+                detail={wedding.reception.detail}
+                photo={wedding.reception.photo}
+                photoAspect="aspect-[5/3]"
+                mapImage={wedding.reception.mapImage}
+                mapsUrl={wedding.reception.mapsUrl}
+                iconSrc="/icons/venue.svg"
               />
-            </div>
-          </section>
-        </Reveal>
+            </Reveal>
 
-        <div className="divider" />
+            <div className="divider" />
 
-        <Reveal enabled={revealsReady}>
-          <RsvpForm />
-        </Reveal>
+            <Reveal enabled={revealsReady}>
+              <Families />
+            </Reveal>
 
-        <div className="divider" />
+            <div className="divider" />
 
-        <Reveal enabled={revealsReady}>
-          <WishesForm />
-        </Reveal>
+            <Reveal enabled={revealsReady}>
+              <section className="px-5 py-12 sm:px-10 sm:py-14">
+                <h2 className="text-center text-[1.85rem] font-semibold tracking-wide text-ink sm:text-4xl">
+                  {wedding.prep.title}
+                </h2>
+                <div className="mt-10 space-y-12">
+                  <PrepBlock
+                    title={wedding.prep.groom.title}
+                    blurb={wedding.prep.groom.blurb}
+                    address={wedding.prep.groom.address}
+                    mapImage={wedding.prep.groom.mapImage}
+                    mapsUrl={wedding.prep.groom.mapsUrl}
+                  />
+                  <PrepBlock
+                    title={wedding.prep.bride.title}
+                    blurb={wedding.prep.bride.blurb}
+                    address={wedding.prep.bride.address}
+                    mapImage={wedding.prep.bride.mapImage}
+                    mapsUrl={wedding.prep.bride.mapsUrl}
+                  />
+                </div>
+              </section>
+            </Reveal>
 
-        <footer className="px-6 pb-8 pt-6 text-center">
-          <p className="font-script text-3xl text-ink">{wedding.namesJoined}</p>
-          <p className="font-ui mt-2 text-sm tracking-[0.18em] text-ink-soft">
-            {wedding.dateDisplay}
-          </p>
-          <p className="font-ui mt-5 text-[0.7rem] tracking-wide text-ink-soft/80">
-            <a
-              href={wedding.music.creditUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline decoration-[var(--line)] underline-offset-4 transition hover:text-accent"
-            >
-              {wedding.music.creditLabel}
-            </a>
-          </p>
+            <div className="divider" />
 
-          <a
-            href={wedding.maker.instagramUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`${wedding.maker.line} — ${wedding.maker.instagramLabel}`}
-            className="font-ui mt-10 flex flex-col items-center gap-3 border-t border-[var(--line)] px-2 pb-2 pt-8 text-ink-soft/80 transition hover:text-accent"
-          >
-            <span className="text-center text-[0.75rem] tracking-wide">
-              {wedding.maker.line}
-            </span>
-            <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--line)] transition hover:border-accent">
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden
+            <Reveal enabled={revealsReady}>
+              <RsvpForm />
+            </Reveal>
+
+            <div className="divider" />
+
+            <Reveal enabled={revealsReady}>
+              <WishesForm />
+            </Reveal>
+
+            <footer className="px-6 pb-8 pt-6 text-center">
+              <p className="font-script text-3xl text-ink">
+                {wedding.namesJoined}
+              </p>
+              <p className="font-ui mt-2 text-sm tracking-[0.18em] text-ink-soft">
+                {wedding.dateDisplay}
+              </p>
+              <p className="font-ui mt-5 text-[0.7rem] tracking-wide text-ink-soft/80">
+                <a
+                  href={wedding.music.creditUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline decoration-[var(--line)] underline-offset-4 transition hover:text-accent"
+                >
+                  {wedding.music.creditLabel}
+                </a>
+              </p>
+
+              <a
+                href={wedding.maker.instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${wedding.maker.line} — ${wedding.maker.instagramLabel}`}
+                className="font-ui mt-10 flex flex-col items-center gap-3 border-t border-[var(--line)] px-2 pb-2 pt-8 text-ink-soft/80 transition hover:text-accent"
               >
-                <rect
-                  x="3.5"
-                  y="3.5"
-                  width="17"
-                  height="17"
-                  rx="5"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                />
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="4"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                />
-                <circle cx="17.2" cy="6.8" r="1" fill="currentColor" />
-              </svg>
-            </span>
-          </a>
-        </footer>
+                <span className="text-center text-[0.75rem] tracking-wide">
+                  {wedding.maker.line}
+                </span>
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--line)] transition hover:border-accent">
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden
+                  >
+                    <rect
+                      x="3.5"
+                      y="3.5"
+                      width="17"
+                      height="17"
+                      rx="5"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                    />
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="4"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                    />
+                    <circle cx="17.2" cy="6.8" r="1" fill="currentColor" />
+                  </svg>
+                </span>
+              </a>
+            </footer>
+          </div>
+        ) : null}
       </div>
 
-      <ScrollTopButton />
+      {mountBody ? <ScrollTopButton /> : null}
     </div>
   );
 }

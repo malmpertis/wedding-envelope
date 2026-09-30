@@ -11,6 +11,8 @@ export function Families() {
             alt=""
             width={64}
             height={40}
+            decoding="async"
+            loading="lazy"
             className="mx-auto mb-6 opacity-70"
           />
           <h2 className="text-[1.85rem] font-semibold tracking-wide text-ink sm:text-4xl">

@@ -45,6 +45,8 @@ export function LocationCard({
           alt=""
           width={56}
           height={56}
+          decoding="async"
+          loading="lazy"
           className="mb-5 opacity-70"
         />
         <h2 className="text-[1.85rem] font-semibold tracking-wide text-ink sm:text-4xl">

@@ -48,11 +48,16 @@ export function Envelope() {
   const [closeTo, setCloseTo] = useState<Rect | null>(null);
   const sheetRef = useRef<HTMLDivElement>(null);
   const timers = useRef<number[]>([]);
+  const rafRef = useRef(0);
   const alive = useRef(true);
 
   const clearTimers = useCallback(() => {
     timers.current.forEach((id) => window.clearTimeout(id));
     timers.current = [];
+    if (rafRef.current) {
+      window.cancelAnimationFrame(rafRef.current);
+      rafRef.current = 0;
+    }
   }, []);
 
   const schedule = useCallback((fn: () => void, ms: number) => {
@@ -78,7 +83,6 @@ export function Envelope() {
 
   const requestOpen = () => {
     if (phase !== "idle") return;
-    unlockAndPlay();
 
     if (!criticalReady) {
       void preloadCriticalAssets().then(() => {
@@ -86,13 +90,17 @@ export function Envelope() {
       });
     }
 
+    // Start the morph first; kick audio on the next frame so YouTube
+    // work doesn’t contend with the opening layout on first tap.
     if (reduceMotion) {
       setPhase("open");
+      schedule(() => unlockAndPlay(), 0);
       return;
     }
 
     setPhase("opening");
     schedule(() => setPhase("open"), EXPAND_MS);
+    schedule(() => unlockAndPlay(), 120);
   };
 
   const close = () => {
@@ -111,7 +119,8 @@ export function Envelope() {
     // FLIP-shrink that same rectangle down to the centered envelope.
     window.scrollTo({ top: 0 });
 
-    requestAnimationFrame(() => {
+    rafRef.current = window.requestAnimationFrame(() => {
+      rafRef.current = 0;
       if (!alive.current) return;
       const node = sheetRef.current;
       const from = node?.getBoundingClientRect();
@@ -228,6 +237,7 @@ export function Envelope() {
                       embedded
                       fromEnvelope
                       revealsReady={phase === "open"}
+                      mountBody={phase === "open"}
                     />
                   </motion.div>
                 ) : null}
@@ -317,32 +327,21 @@ export function Envelope() {
               transition={{ duration: CLOSE_MS / 1000, ease }}
               style={{ position: "fixed", zIndex: 60, perspective: 1400 }}
             >
-              {/* Letter content clips away as the sheet shrinks */}
+              {/* Lightweight stand-in — never remount the full letter on close */}
               <motion.div
-                className="absolute inset-0 origin-top overflow-hidden"
+                className="absolute inset-0 origin-top"
+                style={{ backgroundColor: LETTER_BG }}
                 initial={{ opacity: 1 }}
                 animate={{ opacity: 0 }}
                 transition={{ duration: 0.35, ease }}
-              >
-                <div
-                  className="bg-surface"
-                  style={{ width: closeFrom.width, minHeight: closeFrom.height }}
-                >
-                  <InvitationLetter
-                    onClose={() => {}}
-                    embedded
-                    fromEnvelope
-                    revealsReady={false}
-                  />
-                </div>
-              </motion.div>
+              />
 
               {/* Pocket + names fade in under the folding flap */}
               <motion.div
                 className="absolute inset-0"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.4, delay: 0.3, ease }}
+                transition={{ duration: 0.4, delay: 0.28, ease }}
               >
                 <ClosedEnvelopeFace decorative omitFlap />
               </motion.div>
