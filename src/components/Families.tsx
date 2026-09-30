@@ -17,18 +17,13 @@ export function Families() {
             {wedding.families.title}
           </h2>
 
-          <div className="mt-10">
-            <h3 className="font-ui text-sm font-semibold tracking-wide text-ink">
-              {wedding.families.groomSide.title}
-            </h3>
-            <ul className="mt-3 space-y-2">
-              {wedding.families.groomSide.members.map((name) => (
-                <li key={name} className="text-lg text-ink-soft sm:text-xl">
-                  {name}
-                </li>
-              ))}
-            </ul>
-          </div>
+          <ul className="mt-10 space-y-2">
+            {wedding.families.groomSide.members.map((name) => (
+              <li key={name} className="text-lg text-ink-soft sm:text-xl">
+                {name}
+              </li>
+            ))}
+          </ul>
 
           <p className="mt-8 text-sm leading-relaxed text-ink-soft sm:text-base">
             {wedding.families.footnote}
