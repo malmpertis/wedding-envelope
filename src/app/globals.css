@@ -82,6 +82,56 @@ body {
   overflow: hidden;
 }
 
+/* Venue / church photos — warm paper grade to match the letter */
+.place-photo {
+  position: relative;
+  border: 1px solid var(--line);
+  overflow: hidden;
+  background: var(--surface-soft);
+}
+
+.place-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  /* Soft stone wash: quieter color, warmer paper tone */
+  filter: sepia(0.22) saturate(0.78) contrast(0.96) brightness(1.02);
+  transform: scale(1.02);
+}
+
+.place-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 90% 80% at 50% 40%,
+      transparent 35%,
+      rgb(23 20 18 / 0.14) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgb(255 252 248 / 0.18) 0%,
+      transparent 28%,
+      transparent 72%,
+      rgb(232 226 218 / 0.28) 100%
+    ),
+    linear-gradient(
+      0deg,
+      transparent 60%,
+      rgb(138 111 92 / 0.08) 100%
+    );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .place-photo img {
+    transform: none;
+  }
+}
+
 .divider {
   height: 1px;
   width: 4rem;

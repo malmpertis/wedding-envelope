@@ -16,6 +16,10 @@ type LocationCardProps = {
   place: string;
   detail: string;
   photo?: PlacePhoto;
+  /** Tailwind aspect class — frames photos to the letter rhythm */
+  photoAspect?: string;
+  /** CSS object-position — bias the crop (e.g. "center 20%") */
+  photoPosition?: string;
   mapImage: string;
   mapsUrl: string;
   iconSrc: string;
@@ -27,6 +31,8 @@ export function LocationCard({
   place,
   detail,
   photo,
+  photoAspect = "aspect-[4/5]",
+  photoPosition,
   mapImage,
   mapsUrl,
   iconSrc,
@@ -55,7 +61,7 @@ export function LocationCard({
         </p>
 
         {photo ? (
-          <figure className="mt-8 w-full overflow-hidden">
+          <figure className={`place-photo mt-8 w-full ${photoAspect}`}>
             <picture>
               <source srcSet={asset(photo.webp)} type="image/webp" />
               <img
@@ -65,7 +71,11 @@ export function LocationCard({
                 height={photo.height}
                 decoding="async"
                 loading="lazy"
-                className="h-auto w-full object-cover"
+                style={
+                  photoPosition
+                    ? { objectPosition: photoPosition }
+                    : undefined
+                }
               />
             </picture>
           </figure>
