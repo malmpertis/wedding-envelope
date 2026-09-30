@@ -2,49 +2,66 @@ import { wedding } from "@/content/wedding";
 
 export function Families() {
   return (
-    <section className="px-4 py-12 sm:px-10 sm:py-16">
-      <div className="mx-auto max-w-lg text-center">
-        <img
-          src="/icons/rings.svg"
-          alt=""
-          width={64}
-          height={40}
-          className="mx-auto mb-6 opacity-80"
-        />
-        <h2 className="font-serif text-3xl font-semibold tracking-wide text-ink sm:text-4xl">
-          {wedding.families.title}
-        </h2>
+    <>
+      <section className="px-4 py-12 sm:px-10 sm:py-16">
+        <div className="mx-auto max-w-lg text-center">
+          <img
+            src="/icons/rings.svg"
+            alt=""
+            width={64}
+            height={40}
+            className="mx-auto mb-6 opacity-80"
+          />
+          <h2 className="font-serif text-[1.85rem] font-semibold tracking-wide text-ink sm:text-4xl">
+            {wedding.families.title}
+          </h2>
 
-        <div className="mt-10 space-y-10">
-          <div>
-            <h3 className="text-xs font-medium tracking-[0.22em] text-gold-dark uppercase">
-              {wedding.families.groomSide.title}
-            </h3>
-            <ul className="mt-4 space-y-2">
-              {wedding.families.groomSide.members.map((name) => (
-                <li key={name} className="font-serif text-lg text-ink sm:text-xl">
-                  {name}
-                </li>
-              ))}
-            </ul>
+          <div className="mt-10 space-y-8">
+            <div>
+              <h3 className="text-sm font-semibold text-ink">
+                {wedding.families.groomSide.title}
+              </h3>
+              <ul className="mt-3 space-y-2">
+                {wedding.families.groomSide.members.map((name) => (
+                  <li
+                    key={name}
+                    className="font-serif text-lg text-ink-soft sm:text-xl"
+                  >
+                    {name}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
-          <div className="mx-auto h-px w-16 bg-gold/60" />
-
-          <div>
-            <h3 className="text-xs font-medium tracking-[0.22em] text-gold-dark uppercase">
-              {wedding.families.koumparoi.title}
-            </h3>
-            <ul className="mt-4 space-y-2">
-              {wedding.families.koumparoi.members.map((name) => (
-                <li key={name} className="font-serif text-lg text-ink sm:text-xl">
-                  {name}
-                </li>
-              ))}
-            </ul>
-          </div>
+          <p className="mt-8 text-sm leading-relaxed text-ink-soft sm:text-base">
+            {wedding.families.footnote}
+          </p>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <div className="mx-auto h-px w-24 bg-gold/50" />
+
+      <section className="px-4 py-12 sm:px-10 sm:py-16">
+        <div className="mx-auto max-w-lg text-center">
+          <h2 className="font-serif text-[1.85rem] font-semibold tracking-wide text-ink sm:text-4xl">
+            {wedding.families.koumparoi.title}
+          </h2>
+          <ul className="mt-6 space-y-2">
+            {wedding.families.koumparoi.members.map((name) => (
+              <li
+                key={name}
+                className="font-serif text-lg text-ink sm:text-xl"
+              >
+                {name}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-6 text-sm leading-relaxed text-ink-soft sm:text-base">
+            {wedding.families.koumparoi.footnote}
+          </p>
+        </div>
+      </section>
+    </>
   );
 }

@@ -29,6 +29,12 @@ export function Envelope() {
     window.setTimeout(() => setShowLetter(true), 900);
   };
 
+  const close = () => {
+    setShowLetter(false);
+    setOpened(false);
+    window.scrollTo({ top: 0 });
+  };
+
   return (
     <div className="relative min-h-dvh overflow-x-hidden bg-forest-deep">
       {!showLetter ? (
@@ -124,7 +130,7 @@ export function Envelope() {
         </div>
       ) : (
         <div className="md:bg-[radial-gradient(ellipse_at_top,rgba(35,74,58,0.55),transparent_55%)]">
-          <InvitationLetter />
+          <InvitationLetter onClose={close} />
         </div>
       )}
     </div>

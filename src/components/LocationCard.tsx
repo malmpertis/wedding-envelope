@@ -1,3 +1,6 @@
+import { MapButton } from "@/components/MapButton";
+import { wedding } from "@/content/wedding";
+
 type LocationCardProps = {
   title: string;
   subtitle?: string;
@@ -6,7 +9,6 @@ type LocationCardProps = {
   embedUrl: string;
   mapsUrl: string;
   iconSrc: string;
-  iconAlt: string;
 };
 
 export function LocationCard({
@@ -17,14 +19,13 @@ export function LocationCard({
   embedUrl,
   mapsUrl,
   iconSrc,
-  iconAlt,
 }: LocationCardProps) {
   return (
     <section className="px-4 py-12 sm:px-10 sm:py-14">
       <div className="mx-auto flex max-w-lg flex-col items-center text-center">
         <img
           src={iconSrc}
-          alt={iconAlt}
+          alt=""
           width={56}
           height={56}
           className="mb-5 text-ink opacity-80"
@@ -38,7 +39,9 @@ export function LocationCard({
           </p>
         ) : null}
         <p className="mt-5 font-serif text-xl text-ink sm:text-2xl">{place}</p>
-        <p className="mt-1 text-sm tracking-wide text-ink-soft sm:text-base">{detail}</p>
+        <p className="mt-1 text-sm leading-relaxed tracking-wide text-ink-soft sm:text-base">
+          {detail}
+        </p>
 
         <div className="map-frame mt-8 w-full overflow-hidden rounded-sm bg-cream-warm">
           <iframe
@@ -51,14 +54,7 @@ export function LocationCard({
           />
         </div>
 
-        <a
-          href={mapsUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-6 inline-flex min-h-11 touch-manipulation items-center gap-2 border-b border-gold pb-0.5 text-sm tracking-[0.16em] text-forest uppercase transition hover:text-gold-dark"
-        >
-          Οδηγίες
-        </a>
+        <MapButton href={mapsUrl} label={wedding.mapLabel} />
       </div>
     </section>
   );

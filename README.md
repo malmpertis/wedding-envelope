@@ -23,7 +23,9 @@ All Greek copy and map links live in one file:
 
 - [`src/content/wedding.ts`](src/content/wedding.ts)
 
-Optional couple photo: add `public/couple.jpg` and wire it in [`src/components/InvitationLetter.tsx`](src/components/InvitationLetter.tsx) (placeholder frame is already there).
+Set `contactEmail` there so RSVP / wishes open the guest’s mail app to your address (still free — no backend).
+
+Optional couple photo: drop `public/couple.jpg` in place (the page falls back to a rings placeholder).
 
 ## Free hosting — GitHub Pages + subdomain
 
