@@ -55,13 +55,6 @@ export function RsvpForm() {
         {wedding.rsvp.deadlineNote ? (
           <p className="mt-3 text-sm text-ink">{wedding.rsvp.deadlineNote}</p>
         ) : null}
-        {!wedding.contactEmail ? (
-          <p className="mt-3 text-xs text-ink-soft/80">
-            Ορίστε το <code className="rounded bg-black/5 px-1">contactEmail</code>{" "}
-            στο <code className="rounded bg-black/5 px-1">src/content/wedding.ts</code>{" "}
-            για να φτάνουν οι απαντήσεις στο email σας.
-          </p>
-        ) : null}
       </div>
 
       <form
