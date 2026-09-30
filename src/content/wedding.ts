@@ -49,8 +49,9 @@ export const wedding = {
       width: 720,
       height: 895,
     },
+    // Directions-ready: opens Google Maps with navigation to this pin
     mapsUrl:
-      "https://www.google.com/maps/search/?api=1&query=%CE%99%CE%B5%CF%81%CF%8C%CF%82+%CE%9D%CE%B1%CF%8C%CF%82+%CE%91%CE%B3%CE%AF%CE%BF%CF%85+%CE%9D%CE%B9%CE%BA%CE%BF%CE%BB%CE%AC%CE%BF%CF%85+%CE%A0%CE%B5%CE%B9%CF%81%CE%B1%CE%B9%CE%AC",
+      "https://www.google.com/maps/dir/?api=1&destination=37.9386549,23.6400525",
     mapImage: "/maps/ceremony.jpg",
   },
   prep: {
@@ -60,7 +61,7 @@ export const wedding = {
       blurb: "Οι πιο όμορφες στιγμές ξεκινούν λίγο πριν το μυστήριο.",
       address: "Κεφαλληνίας 24, Πειραιάς",
       mapsUrl:
-        "https://www.google.com/maps/search/?api=1&query=%CE%9A%CE%B5%CF%86%CE%B1%CE%BB%CE%BB%CE%B7%CE%BD%CE%AF%CE%B1%CF%82+24+%CE%A0%CE%B5%CE%B9%CF%81%CE%B1%CE%B9%CE%AC%CF%82",
+        "https://www.google.com/maps/dir/?api=1&destination=37.9515922,23.6580413",
       mapImage: "/maps/prep-bride.jpg",
     },
     groom: {
@@ -68,7 +69,7 @@ export const wedding = {
       blurb: "Με χαμόγελα, φίλους και πολλή αγάπη.",
       address: "Μυκόνου 29, Πειραιάς",
       mapsUrl:
-        "https://www.google.com/maps/search/?api=1&query=%CE%9C%CF%85%CE%BA%CF%8C%CE%BD%CE%BF%CF%85+29+%CE%A0%CE%B5%CE%B9%CF%81%CE%B1%CE%B9%CE%AC%CF%82",
+        "https://www.google.com/maps/dir/?api=1&destination=37.9549259,23.6645582",
       mapImage: "/maps/prep-groom.jpg",
     },
   },
@@ -84,7 +85,8 @@ export const wedding = {
       width: 1600,
       height: 683,
     },
-    mapsUrl: "https://maps.app.goo.gl/xDET5rUWRoFyWECe6",
+    mapsUrl:
+      "https://www.google.com/maps/dir/?api=1&destination=37.9729542,23.7005224",
     mapImage: "/maps/reception.jpg",
   },
   rsvp: {
