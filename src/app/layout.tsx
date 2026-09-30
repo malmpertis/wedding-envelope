@@ -6,6 +6,10 @@ export const metadata: Metadata = {
   title: "Βασίλης & Ιωάννα — Πρόσκληση Γάμου",
   description:
     "Με χαρά σας προσκαλούμε στον γάμο του Βασίλη και της Ιωάννας · 11 Σεπτεμβρίου 2027",
+  icons: {
+    icon: [{ url: asset("/icons/favicon-32.png"), type: "image/png", sizes: "32x32" }],
+    apple: [{ url: asset("/icons/apple-touch-icon.png"), sizes: "180x180" }],
+  },
   openGraph: {
     title: "Βασίλης & Ιωάννα — Πρόσκληση Γάμου",
     description:
