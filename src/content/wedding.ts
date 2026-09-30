@@ -84,8 +84,7 @@ export const wedding = {
       width: 1600,
       height: 683,
     },
-    mapsUrl:
-      "https://www.google.com/maps/search/?api=1&query=%CE%9A%CF%84%CE%AE%CE%BC%CE%B1+Terra+Verde+%CE%A4%CE%B1%CF%8D%CF%81%CE%BF%CF%82",
+    mapsUrl: "https://maps.app.goo.gl/xDET5rUWRoFyWECe6",
     mapImage: "/maps/reception.jpg",
   },
   rsvp: {
