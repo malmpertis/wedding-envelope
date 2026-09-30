@@ -25,22 +25,19 @@ export function InvitationLetter({ onClose }: InvitationLetterProps) {
       transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
     >
       <div className="letter-surface relative pb-16 text-ink">
-        {/* Hero photo first */}
-        <div className="relative">
-          <CouplePhoto />
-          <div className="absolute left-0 right-0 top-0 flex items-center justify-between px-4 pt-4 sm:px-6">
-            <Monogram size={44} className="drop-shadow-sm" />
-            <button
-              type="button"
-              onClick={onClose}
-              className="font-ui min-h-10 touch-manipulation rounded-full bg-surface/85 px-3 text-xs tracking-[0.16em] text-ink-soft uppercase backdrop-blur-sm transition hover:text-ink"
-            >
-              {wedding.closeEnvelope}
-            </button>
-          </div>
+        <div className="flex items-center justify-between px-5 pt-5 sm:px-8">
+          <Monogram size={48} />
+          <button
+            type="button"
+            onClick={onClose}
+            className="font-ui min-h-10 touch-manipulation px-2 text-xs tracking-[0.16em] text-ink-soft uppercase transition hover:text-ink"
+          >
+            {wedding.closeEnvelope}
+          </button>
         </div>
 
-        <Reveal className="relative px-5 pb-12 pt-10 text-center sm:px-10">
+        {/* Brand-first hero — names lead before imagery */}
+        <Reveal className="relative px-5 pb-10 pt-10 text-center sm:px-10 sm:pb-12 sm:pt-14">
           <p className="font-ui text-[0.7rem] tracking-[0.28em] text-accent uppercase">
             Πρόσκληση γάμου
           </p>
@@ -53,6 +50,11 @@ export function InvitationLetter({ onClose }: InvitationLetterProps) {
           <p className="mt-6 text-2xl tracking-wide text-ink sm:text-3xl">
             {wedding.dateDisplay}
           </p>
+        </Reveal>
+
+        {/* Portrait as the first visual beat after the brand */}
+        <Reveal>
+          <CouplePhoto />
         </Reveal>
 
         <Reveal>
