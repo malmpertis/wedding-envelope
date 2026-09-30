@@ -5,13 +5,17 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { wedding } from "@/content/wedding";
 import { InvitationLetter } from "@/components/InvitationLetter";
 import { Monogram } from "@/components/Monogram";
-import { preloadInvitationAssets } from "@/lib/preload";
+import {
+  preloadCriticalAssets,
+  preloadSecondaryAssets,
+} from "@/lib/preload";
+
+const OPEN_ANIM_MS = 850;
 
 export function Envelope() {
   const reduceMotion = useReducedMotion();
   const [phase, setPhase] = useState<"idle" | "opening" | "letter">("idle");
-  const [assetsReady, setAssetsReady] = useState(false);
-  const [waitingOnAssets, setWaitingOnAssets] = useState(false);
+  const [criticalReady, setCriticalReady] = useState(false);
   const openRequested = useRef(false);
   const timers = useRef<number[]>([]);
 
@@ -20,53 +24,80 @@ export function Envelope() {
     timers.current = [];
   };
 
-  // Warm assets while the closed envelope is on screen
   useEffect(() => {
     let cancelled = false;
-    preloadInvitationAssets().then(() => {
-      if (!cancelled) setAssetsReady(true);
+    preloadSecondaryAssets();
+    preloadCriticalAssets().then(() => {
+      if (!cancelled) setCriticalReady(true);
     });
     return () => {
       cancelled = true;
     };
   }, []);
 
+  const showLetter = useCallback(() => {
+    setPhase("letter");
+  }, []);
+
   const finishOpen = useCallback(() => {
     clearTimers();
     if (reduceMotion) {
-      setPhase("letter");
+      showLetter();
       return;
     }
     setPhase("opening");
-    timers.current.push(
-      window.setTimeout(() => setPhase("letter"), 1400),
-    );
-  }, [reduceMotion]);
+    timers.current.push(window.setTimeout(showLetter, OPEN_ANIM_MS));
+  }, [reduceMotion, showLetter]);
 
-  // If user tapped before preload finished, open as soon as ready
+  // Tap happened before preload finished — open as soon as critical assets are ready
   useEffect(() => {
-    if (assetsReady && openRequested.current && phase === "idle") {
-      setWaitingOnAssets(false);
+    if (criticalReady && openRequested.current && phase === "idle") {
       finishOpen();
     }
-  }, [assetsReady, phase, finishOpen]);
+  }, [criticalReady, phase, finishOpen]);
 
   useEffect(() => clearTimers, []);
 
   const requestOpen = () => {
     if (phase !== "idle") return;
     openRequested.current = true;
-    if (!assetsReady) {
-      setWaitingOnAssets(true);
+    const startedAt = performance.now();
+
+    // Always start the flap immediately so the UI doesn't feel stuck
+    if (reduceMotion) {
+      void (criticalReady
+        ? Promise.resolve()
+        : Promise.race([
+            preloadCriticalAssets().then(() => setCriticalReady(true)),
+            new Promise<void>((r) => {
+              timers.current.push(window.setTimeout(r, 400));
+            }),
+          ])
+      ).then(showLetter);
       return;
     }
-    finishOpen();
+
+    setPhase("opening");
+
+    const ready = criticalReady
+      ? Promise.resolve()
+      : Promise.race([
+          preloadCriticalAssets().then(() => setCriticalReady(true)),
+          new Promise<void>((r) => {
+            timers.current.push(window.setTimeout(r, 450));
+          }),
+        ]);
+
+    void ready.then(() => {
+      const elapsed = performance.now() - startedAt;
+      const remaining = Math.max(0, OPEN_ANIM_MS - elapsed);
+      timers.current.push(window.setTimeout(showLetter, remaining));
+    });
   };
 
   const close = () => {
     clearTimers();
     openRequested.current = false;
-    setWaitingOnAssets(false);
     setPhase("idle");
     window.scrollTo({ top: 0 });
   };
@@ -80,9 +111,6 @@ export function Envelope() {
   }
 
   const opening = phase === "opening";
-  const statusLabel = waitingOnAssets
-    ? "Φόρτωση…"
-    : wedding.openCta;
 
   return (
     <div className="atmosphere relative flex min-h-dvh items-center justify-center overflow-hidden px-4 py-8 md:px-8">
@@ -101,12 +129,11 @@ export function Envelope() {
           style={{ perspective: "1400px" }}
         >
           <div className="absolute inset-0 overflow-hidden rounded-[1.25rem] bg-[#ebe4db] shadow-[0_24px_60px_rgb(23_20_18/0.14)] ring-1 ring-black/5">
-            {/* Inner paper — names live here so they never sit on the beige rim */}
             <div className="absolute inset-[9%] flex flex-col justify-end rounded-md bg-surface px-5 pb-7 pt-6 sm:inset-[10%] sm:px-6 sm:pb-8">
               <motion.div
                 className="relative z-10 text-center"
                 animate={opening ? { opacity: 0, y: 12 } : { opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.45 }}
               >
                 <p className="font-script text-2xl leading-snug text-ink sm:text-3xl">
                   {wedding.namesJoined}
@@ -139,7 +166,7 @@ export function Envelope() {
                   ? { rotateX: -168, y: -12, opacity: 0.35 }
                   : { rotateX: 0, y: 0, opacity: 1 }
               }
-              transition={{ duration: 1.15, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
             />
 
             <motion.div
@@ -149,7 +176,7 @@ export function Envelope() {
                   ? { scale: 0.7, opacity: 0, y: -36 }
                   : { scale: 1, opacity: 1, y: 0 }
               }
-              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
             >
               <Monogram size={108} />
             </motion.div>
@@ -158,7 +185,7 @@ export function Envelope() {
 
         {!opening ? (
           <p className="font-ui mt-6 text-center text-xs tracking-[0.18em] text-ink-soft uppercase">
-            {statusLabel}
+            {wedding.openCta}
           </p>
         ) : null}
       </motion.div>

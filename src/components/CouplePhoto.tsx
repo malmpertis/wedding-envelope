@@ -28,11 +28,9 @@ export function CouplePhoto() {
 
       const rect = frame.getBoundingClientRect();
       const viewH = window.innerHeight || 1;
-      // Distance of frame center from viewport center
       const frameCenter = rect.top + rect.height / 2;
       const viewCenter = viewH / 2;
       const delta = frameCenter - viewCenter;
-      // Image lags behind scroll (moves less than the page)
       const shift = delta * -0.28;
       img.style.transform = `translate3d(0, ${shift}px, 0) scale(1.22)`;
     };
@@ -42,7 +40,10 @@ export function CouplePhoto() {
     };
 
     update();
-    window.addEventListener("scroll", onScrollOrResize, { passive: true, capture: true });
+    window.addEventListener("scroll", onScrollOrResize, {
+      passive: true,
+      capture: true,
+    });
     window.addEventListener("resize", onScrollOrResize);
     motionQuery.addEventListener?.("change", update);
 
@@ -60,18 +61,21 @@ export function CouplePhoto() {
         ref={frameRef}
         className="relative aspect-[4/5] w-full overflow-hidden bg-surface-soft sm:aspect-[5/4]"
       >
-        <img
-          ref={imgRef}
-          src="/couple.png"
-          alt={wedding.namesJoined}
-          width={1080}
-          height={1440}
-          decoding="async"
-          loading="eager"
-          fetchPriority="high"
-          className="pointer-events-none absolute left-0 top-[-12%] h-[124%] w-full max-w-none object-cover object-[center_40%] will-change-transform"
-          style={{ transform: "translate3d(0, 0, 0) scale(1.22)" }}
-        />
+        <picture>
+          <source srcSet="/couple.webp" type="image/webp" />
+          <img
+            ref={imgRef}
+            src="/couple.jpg"
+            alt={wedding.namesJoined}
+            width={1080}
+            height={1440}
+            decoding="async"
+            loading="eager"
+            fetchPriority="high"
+            className="pointer-events-none absolute left-0 top-[-12%] h-[124%] w-full max-w-none object-cover object-[center_40%] will-change-transform"
+            style={{ transform: "translate3d(0, 0, 0) scale(1.22)" }}
+          />
+        </picture>
       </div>
       <figcaption className="flex justify-center px-6 py-6 sm:px-10 sm:py-8">
         <img

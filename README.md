@@ -25,7 +25,7 @@ All Greek copy and map links live in one file:
 
 Set `contactEmail` there so RSVP / wishes open the guest’s mail app to your address (still free — no backend).
 
-Optional couple photo: drop `public/couple.png` in place (the page falls back to a rings placeholder).
+Couple photo: `public/couple.webp` + `public/couple.jpg` (keep both in sync when replacing).
 
 ## Free hosting — GitHub Pages + subdomain
 
