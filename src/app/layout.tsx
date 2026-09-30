@@ -35,9 +35,6 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
-        <link rel="preconnect" href="https://maps.google.com" />
-        <link rel="preconnect" href="https://maps.googleapis.com" />
-        <link rel="dns-prefetch" href="https://maps.google.com" />
         <link
           href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Source+Sans+3:wght@400;500;600&display=swap&subset=greek,latin,latin-ext"
           rel="stylesheet"
@@ -50,6 +47,7 @@ export default function RootLayout({
         />
         <link rel="preload" as="image" href="/couple.jpg" />
         <link rel="preload" as="image" href="/welcome-script.png" />
+        <link rel="preload" as="image" href="/maps/ceremony.jpg" />
       </head>
       <body className="min-h-full font-display">{children}</body>
     </html>

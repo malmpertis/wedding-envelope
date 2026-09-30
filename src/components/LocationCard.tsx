@@ -7,7 +7,7 @@ type LocationCardProps = {
   subtitle?: string;
   place: string;
   detail: string;
-  embedUrl: string;
+  mapImage: string;
   mapsUrl: string;
   iconSrc: string;
 };
@@ -17,7 +17,7 @@ export function LocationCard({
   subtitle,
   place,
   detail,
-  embedUrl,
+  mapImage,
   mapsUrl,
   iconSrc,
 }: LocationCardProps) {
@@ -45,7 +45,7 @@ export function LocationCard({
         </p>
 
         <div className="mt-8 w-full">
-          <MapEmbed title={place} src={embedUrl} />
+          <MapEmbed title={place} imageSrc={mapImage} />
         </div>
 
         <MapButton href={mapsUrl} label={wedding.mapLabel} />

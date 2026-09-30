@@ -40,8 +40,7 @@ export const wedding = {
     detail: "στον Ιερό Ναό Αγίου Νικολάου, Πειραιάς.",
     mapsUrl:
       "https://www.google.com/maps/search/?api=1&query=%CE%99%CE%B5%CF%81%CF%8C%CF%82+%CE%9D%CE%B1%CF%8C%CF%82+%CE%91%CE%B3%CE%AF%CE%BF%CF%85+%CE%9D%CE%B9%CE%BA%CE%BF%CE%BB%CE%AC%CE%BF%CF%85+%CE%A0%CE%B5%CE%B9%CF%81%CE%B1%CE%B9%CE%AC",
-    embedUrl:
-      "https://maps.google.com/maps?q=%CE%99%CE%B5%CF%81%CF%8C%CF%82+%CE%9D%CE%B1%CF%8C%CF%82+%CE%91%CE%B3%CE%AF%CE%BF%CF%85+%CE%9D%CE%B9%CE%BA%CE%BF%CE%BB%CE%AC%CE%BF%CF%85+%CE%A0%CE%B5%CE%B9%CF%81%CE%B1%CE%B9%CE%AC&z=16&output=embed",
+    mapImage: "/maps/ceremony.jpg",
   },
   prep: {
     title: "Προετοιμασία",
@@ -51,8 +50,7 @@ export const wedding = {
       address: "Κεφαλληνίας 24, Πειραιάς",
       mapsUrl:
         "https://www.google.com/maps/search/?api=1&query=%CE%9A%CE%B5%CF%86%CE%B1%CE%BB%CE%BB%CE%B7%CE%BD%CE%AF%CE%B1%CF%82+24+%CE%A0%CE%B5%CE%B9%CF%81%CE%B1%CE%B9%CE%AC%CF%82",
-      embedUrl:
-        "https://maps.google.com/maps?q=%CE%9A%CE%B5%CF%86%CE%B1%CE%BB%CE%BB%CE%B7%CE%BD%CE%AF%CE%B1%CF%82+24+%CE%A0%CE%B5%CE%B9%CF%81%CE%B1%CE%B9%CE%AC%CF%82&z=16&output=embed",
+      mapImage: "/maps/prep-bride.jpg",
     },
     groom: {
       title: "Προετοιμασία γαμπρού",
@@ -60,8 +58,7 @@ export const wedding = {
       address: "Μυκόνου 29, Πειραιάς",
       mapsUrl:
         "https://www.google.com/maps/search/?api=1&query=%CE%9C%CF%85%CE%BA%CF%8C%CE%BD%CE%BF%CF%85+29+%CE%A0%CE%B5%CE%B9%CF%81%CE%B1%CE%B9%CE%AC%CF%82",
-      embedUrl:
-        "https://maps.google.com/maps?q=%CE%9C%CF%85%CE%BA%CF%8C%CE%BD%CE%BF%CF%85+29+%CE%A0%CE%B5%CE%B9%CF%81%CE%B1%CE%B9%CE%AC%CF%82&z=16&output=embed",
+      mapImage: "/maps/prep-groom.jpg",
     },
   },
   reception: {
@@ -73,8 +70,7 @@ export const wedding = {
     detail: "στο Κτήμα Terra Verde, Πάρκο Ηρώων, Ταύρος.",
     mapsUrl:
       "https://www.google.com/maps/search/?api=1&query=%CE%9A%CF%84%CE%AE%CE%BC%CE%B1+Terra+Verde+%CE%A4%CE%B1%CF%8D%CF%81%CE%BF%CF%82",
-    embedUrl:
-      "https://maps.google.com/maps?q=%CE%9A%CF%84%CE%AE%CE%BC%CE%B1+Terra+Verde+%CE%A4%CE%B1%CF%8D%CF%81%CE%BF%CF%82&z=15&output=embed",
+    mapImage: "/maps/reception.jpg",
   },
   rsvp: {
     title: "Επιβεβαίωση Παρουσίας",

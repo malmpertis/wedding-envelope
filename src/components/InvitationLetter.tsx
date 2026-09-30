@@ -8,17 +8,10 @@ import { Families } from "@/components/Families";
 import { RsvpForm, WishesForm } from "@/components/GuestForms";
 import { LocationCard } from "@/components/LocationCard";
 import { MapButton } from "@/components/MapButton";
-import { MapEmbed, MapWarmup } from "@/components/MapEmbed";
+import { MapEmbed } from "@/components/MapEmbed";
 import { Monogram } from "@/components/Monogram";
 import { Reveal } from "@/components/Reveal";
 import { ScrollTopButton } from "@/components/ScrollTopButton";
-
-const MAP_EMBED_URLS = [
-  wedding.ceremony.embedUrl,
-  wedding.reception.embedUrl,
-  wedding.prep.groom.embedUrl,
-  wedding.prep.bride.embedUrl,
-] as const;
 
 type InvitationLetterProps = {
   onClose: () => void;
@@ -33,7 +26,6 @@ export function InvitationLetter({ onClose }: InvitationLetterProps) {
       transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
     >
       <div className="letter-surface relative pb-16 text-ink">
-        <MapWarmup urls={MAP_EMBED_URLS} />
         <div className="flex items-center justify-between px-5 pt-5 sm:px-8">
           <Monogram size={48} />
           <button
@@ -82,7 +74,7 @@ export function InvitationLetter({ onClose }: InvitationLetterProps) {
             subtitle={wedding.ceremony.subtitle}
             place={wedding.ceremony.place}
             detail={wedding.ceremony.detail}
-            embedUrl={wedding.ceremony.embedUrl}
+            mapImage={wedding.ceremony.mapImage}
             mapsUrl={wedding.ceremony.mapsUrl}
             iconSrc="/icons/church.svg"
           />
@@ -96,7 +88,7 @@ export function InvitationLetter({ onClose }: InvitationLetterProps) {
             subtitle={wedding.reception.subtitle}
             place={wedding.reception.place}
             detail={wedding.reception.detail}
-            embedUrl={wedding.reception.embedUrl}
+            mapImage={wedding.reception.mapImage}
             mapsUrl={wedding.reception.mapsUrl}
             iconSrc="/icons/venue.svg"
           />
@@ -120,14 +112,14 @@ export function InvitationLetter({ onClose }: InvitationLetterProps) {
                 title={wedding.prep.groom.title}
                 blurb={wedding.prep.groom.blurb}
                 address={wedding.prep.groom.address}
-                embedUrl={wedding.prep.groom.embedUrl}
+                mapImage={wedding.prep.groom.mapImage}
                 mapsUrl={wedding.prep.groom.mapsUrl}
               />
               <PrepBlock
                 title={wedding.prep.bride.title}
                 blurb={wedding.prep.bride.blurb}
                 address={wedding.prep.bride.address}
-                embedUrl={wedding.prep.bride.embedUrl}
+                mapImage={wedding.prep.bride.mapImage}
                 mapsUrl={wedding.prep.bride.mapsUrl}
               />
             </div>
@@ -170,13 +162,13 @@ function PrepBlock({
   title,
   blurb,
   address,
-  embedUrl,
+  mapImage,
   mapsUrl,
 }: {
   title: string;
   blurb: string;
   address: string;
-  embedUrl: string;
+  mapImage: string;
   mapsUrl: string;
 }) {
   return (
@@ -185,7 +177,7 @@ function PrepBlock({
       <p className="mt-3 text-base text-ink-soft">{blurb}</p>
       <p className="mt-3 text-lg text-ink">{address}</p>
       <div className="mt-6">
-        <MapEmbed title={title} src={embedUrl} className="h-48 sm:h-56" />
+        <MapEmbed title={title} imageSrc={mapImage} className="h-48 sm:h-56" />
       </div>
       <MapButton href={mapsUrl} label={wedding.mapLabel} />
     </div>

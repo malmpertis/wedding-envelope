@@ -9,6 +9,10 @@ export const SECONDARY_ASSETS = [
   "/icons/rings.svg",
   "/icons/church.svg",
   "/icons/venue.svg",
+  "/maps/ceremony.jpg",
+  "/maps/reception.jpg",
+  "/maps/prep-groom.jpg",
+  "/maps/prep-bride.jpg",
   "/audio/ambient.mp3",
 ] as const;
 
