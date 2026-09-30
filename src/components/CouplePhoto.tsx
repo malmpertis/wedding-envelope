@@ -82,7 +82,7 @@ export function CouplePhoto() {
       <figcaption className="flex justify-center px-6 py-6 sm:px-10 sm:py-8">
         <img
           src={asset("/welcome-script.png")}
-          alt="Welcome to our love story"
+          alt={wedding.welcomeScript}
           width={777}
           height={223}
           decoding="async"

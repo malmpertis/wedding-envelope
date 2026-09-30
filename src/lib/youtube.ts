@@ -2,12 +2,9 @@
 
 export type YTPlayer = {
   playVideo: () => void;
-  pauseVideo: () => void;
   mute: () => void;
   unMute: () => void;
-  isMuted: () => boolean;
   setVolume: (volume: number) => void;
-  getPlayerState: () => number;
   destroy: () => void;
 };
 
@@ -27,16 +24,11 @@ type YTNamespace = {
       events?: {
         onReady?: (event: YTPlayerEvent) => void;
         onStateChange?: (event: YTPlayerEvent) => void;
-        onError?: (event: { data: number }) => void;
       };
     },
   ) => YTPlayer;
   PlayerState: {
     ENDED: number;
-    PLAYING: number;
-    PAUSED: number;
-    BUFFERING: number;
-    CUED: number;
   };
 };
 
@@ -70,8 +62,13 @@ export function loadYouTubeIframeAPI(): Promise<YTNamespace> {
       const script = document.createElement("script");
       script.src = "https://www.youtube.com/iframe_api";
       script.async = true;
-      script.onerror = () => reject(new Error("Failed to load YouTube iframe API"));
+      script.onerror = () => {
+        apiPromise = null;
+        reject(new Error("Failed to load YouTube iframe API"));
+      };
       document.head.appendChild(script);
+    } else if (window.YT?.Player) {
+      resolve(window.YT);
     }
   });
 

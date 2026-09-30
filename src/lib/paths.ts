@@ -1,10 +1,9 @@
 /**
  * Public asset URLs for static export.
  *
- * Use root-relative paths that include the deploy basePath when present.
- * Next does not rewrite hardcoded "/public/..." strings, and client bundles
- * do not always see next.config `env` — so we read the router basePath
- * inject and also accept NEXT_PUBLIC_BASE_PATH.
+ * Next does not rewrite hardcoded "/…" strings in client components, so we
+ * resolve the deploy basePath from NEXT_PUBLIC_BASE_PATH / the router inject,
+ * with a document script fallback for GitHub Pages project sites.
  */
 function readBasePath(): string {
   const fromEnv = (
@@ -14,7 +13,6 @@ function readBasePath(): string {
   ).replace(/\/$/, "");
   if (fromEnv) return fromEnv;
 
-  // Client fallback: derive from the script URL Next loads under basePath
   if (typeof document !== "undefined") {
     const script = document.querySelector(
       'script[src*="/_next/"]',
@@ -35,13 +33,10 @@ function readBasePath(): string {
   return "";
 }
 
-export const BASE_PATH = readBasePath();
-
 /** Resolve a public file path (e.g. "/couple.jpg") for the current deploy. */
 export function asset(path: string): string {
   if (!path) return path;
   if (/^(https?:|data:|blob:)/i.test(path)) return path;
   const normalized = path.startsWith("/") ? path : `/${path}`;
-  const base = readBasePath();
-  return `${base}${normalized}`;
+  return `${readBasePath()}${normalized}`;
 }

@@ -6,13 +6,9 @@ export const wedding = {
   dateISO: "2027-09-11T00:00:00+03:00",
   dateDisplay: "11 Σεπτεμβρίου 2027",
   dateShort: "11 · 09 · 2027",
-  welcomeScript: "Καλωσορίσατε στην ιστορία αγάπης μας",
+  welcomeScript: "Welcome to our love story",
   heroLine:
     "Ενώνουμε τις ζωές μας και θα θέλαμε να είστε μαζί μας σ’ αυτή τη μοναδική στιγμή.",
-  /**
-   * Optional fallback email (unused when forms.endpoint is set).
-   */
-  contactEmail: "",
   /**
    * Google Sheet via Apps Script (see scripts/google-sheets-apps-script.js).
    * 1) Paste the script into your Sheet → Deploy as Web app (Anyone)
@@ -47,7 +43,6 @@ export const wedding = {
     title: "Το Μυστήριο",
     subtitle: "Το μυστήριο του γάμου μας θα γίνει",
     place: "Άγιος Νικόλαος",
-    city: "Πειραιάς",
     detail: "στον Ιερό Ναό Αγίου Νικολάου, Πειραιάς.",
     mapsUrl:
       "https://www.google.com/maps/search/?api=1&query=%CE%99%CE%B5%CF%81%CF%8C%CF%82+%CE%9D%CE%B1%CF%8C%CF%82+%CE%91%CE%B3%CE%AF%CE%BF%CF%85+%CE%9D%CE%B9%CE%BA%CE%BF%CE%BB%CE%AC%CE%BF%CF%85+%CE%A0%CE%B5%CE%B9%CF%81%CE%B1%CE%B9%CE%AC",
@@ -77,7 +72,6 @@ export const wedding = {
     subtitle:
       "Μετά το μυστήριο, σας περιμένουμε να συνεχίσουμε τη γιορτή μας",
     place: "Κτήμα Terra Verde",
-    city: "Ταύρος",
     detail: "στο Κτήμα Terra Verde, Πάρκο Ηρώων, Ταύρος.",
     mapsUrl:
       "https://www.google.com/maps/search/?api=1&query=%CE%9A%CF%84%CE%AE%CE%BC%CE%B1+Terra+Verde+%CE%A4%CE%B1%CF%8D%CF%81%CE%BF%CF%82",
@@ -118,8 +112,6 @@ export const wedding = {
   music: {
     youtubeVideoId: "yOFgvhYRcY8",
     volume: 35,
-    title: "Romantic Day",
-    artist: "Alex-Productions",
     creditUrl: "https://www.youtube.com/watch?v=yOFgvhYRcY8",
     creditLabel: "Μουσική: Romantic Day — Alex-Productions",
   },

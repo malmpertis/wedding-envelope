@@ -28,31 +28,14 @@ function loadImage(src: string): Promise<void> {
   });
 }
 
-function loadFetch(src: string): Promise<void> {
-  return fetch(src, { cache: "force-cache" })
-    .then(() => undefined)
-    .catch(() => undefined);
-}
-
-function loadOne(src: string): Promise<void> {
-  if (/\.(svg|jpg|jpeg|png|webp)$/i.test(src)) return loadImage(src);
-  return loadFetch(src);
-}
-
 /** Couple photo + caption — gate opening on these */
 export function preloadCriticalAssets(): Promise<void> {
   if (typeof window === "undefined") return Promise.resolve();
-  return Promise.all(CRITICAL_IMAGES.map(loadOne)).then(() => undefined);
+  return Promise.all(CRITICAL_IMAGES.map(loadImage)).then(() => undefined);
 }
 
-/** Icons/audio — nice to have, never block opening */
+/** Icons / maps — nice to have, never block opening */
 export function preloadSecondaryAssets(): void {
   if (typeof window === "undefined") return;
-  void Promise.all(SECONDARY_ASSETS.map(loadOne));
-}
-
-/** @deprecated use preloadCriticalAssets + preloadSecondaryAssets */
-export function preloadInvitationAssets(): Promise<void> {
-  preloadSecondaryAssets();
-  return preloadCriticalAssets();
+  void Promise.all(SECONDARY_ASSETS.map(loadImage));
 }

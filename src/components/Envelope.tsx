@@ -18,64 +18,56 @@ export function Envelope() {
   const { unlockAndPlay } = useInvitationAudio();
   const [phase, setPhase] = useState<"idle" | "opening" | "letter">("idle");
   const [criticalReady, setCriticalReady] = useState(false);
-  const openRequested = useRef(false);
   const timers = useRef<number[]>([]);
+  const alive = useRef(true);
 
-  const clearTimers = () => {
+  const clearTimers = useCallback(() => {
     timers.current.forEach((id) => window.clearTimeout(id));
     timers.current = [];
-  };
+  }, []);
+
+  const schedule = useCallback(
+    (fn: () => void, ms: number) => {
+      const id = window.setTimeout(() => {
+        if (alive.current) fn();
+      }, ms);
+      timers.current.push(id);
+    },
+    [],
+  );
 
   useEffect(() => {
+    alive.current = true;
     let cancelled = false;
     preloadSecondaryAssets();
     preloadCriticalAssets().then(() => {
-      if (!cancelled) setCriticalReady(true);
+      if (!cancelled && alive.current) setCriticalReady(true);
     });
     return () => {
       cancelled = true;
+      alive.current = false;
+      clearTimers();
     };
-  }, []);
+  }, [clearTimers]);
 
   const showLetter = useCallback(() => {
+    if (!alive.current) return;
     setPhase("letter");
   }, []);
 
-  const finishOpen = useCallback(() => {
-    clearTimers();
-    if (reduceMotion) {
-      showLetter();
-      return;
-    }
-    setPhase("opening");
-    timers.current.push(window.setTimeout(showLetter, OPEN_ANIM_MS));
-  }, [reduceMotion, showLetter]);
-
-  // Tap happened before preload finished — open as soon as critical assets are ready
-  useEffect(() => {
-    if (criticalReady && openRequested.current && phase === "idle") {
-      finishOpen();
-    }
-  }, [criticalReady, phase, finishOpen]);
-
-  useEffect(() => clearTimers, []);
-
   const requestOpen = () => {
     if (phase !== "idle") return;
-    openRequested.current = true;
-    // User gesture — start royalty-free YouTube audio (hidden player)
     unlockAndPlay();
     const startedAt = performance.now();
 
-    // Always start the flap immediately so the UI doesn't feel stuck
     if (reduceMotion) {
       void (criticalReady
         ? Promise.resolve()
         : Promise.race([
-            preloadCriticalAssets().then(() => setCriticalReady(true)),
-            new Promise<void>((r) => {
-              timers.current.push(window.setTimeout(r, 400));
+            preloadCriticalAssets().then(() => {
+              if (alive.current) setCriticalReady(true);
             }),
+            new Promise<void>((r) => schedule(r, 400)),
           ])
       ).then(showLetter);
       return;
@@ -86,22 +78,21 @@ export function Envelope() {
     const ready = criticalReady
       ? Promise.resolve()
       : Promise.race([
-          preloadCriticalAssets().then(() => setCriticalReady(true)),
-          new Promise<void>((r) => {
-            timers.current.push(window.setTimeout(r, 450));
+          preloadCriticalAssets().then(() => {
+            if (alive.current) setCriticalReady(true);
           }),
+          new Promise<void>((r) => schedule(r, 450)),
         ]);
 
     void ready.then(() => {
-      const elapsed = performance.now() - startedAt;
-      const remaining = Math.max(0, OPEN_ANIM_MS - elapsed);
-      timers.current.push(window.setTimeout(showLetter, remaining));
+      if (!alive.current) return;
+      const remaining = Math.max(0, OPEN_ANIM_MS - (performance.now() - startedAt));
+      schedule(showLetter, remaining);
     });
   };
 
   const close = () => {
     clearTimers();
-    openRequested.current = false;
     setPhase("idle");
     window.scrollTo({ top: 0 });
   };

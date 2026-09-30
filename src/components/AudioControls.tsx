@@ -53,7 +53,22 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     let cancelled = false;
     let player: YTPlayer | null = null;
 
-    document.getElementById(PLAYER_HOST_ID)?.remove();
+    const destroyPlayer = (instance: YTPlayer | null) => {
+      if (!instance) return;
+      try {
+        instance.destroy();
+      } catch {
+        /* ignore */
+      }
+    };
+
+    // Tear down any leftover host from a prior mount (Strict Mode / HMR)
+    const stale = document.getElementById(PLAYER_HOST_ID);
+    if (stale) {
+      destroyPlayer(playerRef.current);
+      playerRef.current = null;
+      stale.remove();
+    }
 
     const mount = document.createElement("div");
     mount.id = PLAYER_HOST_ID;
@@ -86,7 +101,10 @@ export function AudioProvider({ children }: { children: ReactNode }) {
           },
           events: {
             onReady: (event) => {
-              if (cancelled) return;
+              if (cancelled) {
+                destroyPlayer(event.target);
+                return;
+              }
               playerRef.current = event.target;
               event.target.setVolume(wedding.music.volume);
               event.target.mute();
@@ -105,6 +123,10 @@ export function AudioProvider({ children }: { children: ReactNode }) {
             },
           },
         });
+        if (cancelled) {
+          destroyPlayer(player);
+          player = null;
+        }
       })
       .catch(() => {
         /* Mute control remains; playback no-ops until API loads */
@@ -112,12 +134,9 @@ export function AudioProvider({ children }: { children: ReactNode }) {
 
     return () => {
       cancelled = true;
+      const current = playerRef.current ?? player;
       playerRef.current = null;
-      try {
-        player?.destroy();
-      } catch {
-        /* ignore */
-      }
+      destroyPlayer(current);
       mount.remove();
     };
   }, [applyPlayback]);

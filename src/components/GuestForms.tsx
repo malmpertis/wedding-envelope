@@ -1,12 +1,23 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { wedding } from "@/content/wedding";
 import {
   formsConfigured,
   submitToSheet,
   type FormStatus,
 } from "@/lib/forms";
+
+function useAlive() {
+  const alive = useRef(true);
+  useEffect(() => {
+    alive.current = true;
+    return () => {
+      alive.current = false;
+    };
+  }, []);
+  return alive;
+}
 
 const fieldClass =
   "font-ui mt-2 w-full border border-[var(--line)] bg-white px-3 py-3 text-base text-ink outline-none transition focus:border-accent disabled:opacity-60";
@@ -41,6 +52,7 @@ function StatusMessage({ status }: { status: FormStatus }) {
 
 export function RsvpForm() {
   const [status, setStatus] = useState<FormStatus>("idle");
+  const alive = useAlive();
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -69,10 +81,11 @@ export function RsvpForm() {
         children,
         notes,
       });
+      if (!alive.current) return;
       setStatus("success");
       form.reset();
     } catch {
-      setStatus("error");
+      if (alive.current) setStatus("error");
     }
   };
 
@@ -182,6 +195,7 @@ export function RsvpForm() {
 
 export function WishesForm() {
   const [status, setStatus] = useState<FormStatus>("idle");
+  const alive = useAlive();
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -195,10 +209,11 @@ export function WishesForm() {
     setStatus("submitting");
     try {
       await submitToSheet({ type: "wish", name, wish });
+      if (!alive.current) return;
       setStatus("success");
       form.reset();
     } catch {
-      setStatus("error");
+      if (alive.current) setStatus("error");
     }
   };
 
