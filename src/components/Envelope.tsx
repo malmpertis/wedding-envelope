@@ -1,14 +1,18 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { wedding } from "@/content/wedding";
 import { InvitationLetter } from "@/components/InvitationLetter";
 import { Monogram } from "@/components/Monogram";
+import { preloadInvitationAssets } from "@/lib/preload";
 
 export function Envelope() {
   const reduceMotion = useReducedMotion();
   const [phase, setPhase] = useState<"idle" | "opening" | "letter">("idle");
+  const [assetsReady, setAssetsReady] = useState(false);
+  const [waitingOnAssets, setWaitingOnAssets] = useState(false);
+  const openRequested = useRef(false);
   const timers = useRef<number[]>([]);
 
   const clearTimers = () => {
@@ -16,33 +20,55 @@ export function Envelope() {
     timers.current = [];
   };
 
-  const startOpenSequence = () => {
+  // Warm assets while the closed envelope is on screen
+  useEffect(() => {
+    let cancelled = false;
+    preloadInvitationAssets().then(() => {
+      if (!cancelled) setAssetsReady(true);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const finishOpen = useCallback(() => {
     clearTimers();
     if (reduceMotion) {
-      timers.current.push(window.setTimeout(() => setPhase("letter"), 150));
+      setPhase("letter");
       return;
     }
-    timers.current.push(window.setTimeout(() => setPhase("opening"), 850));
-    timers.current.push(window.setTimeout(() => setPhase("letter"), 2500));
-  };
-
-  useEffect(() => {
-    startOpenSequence();
-    return clearTimers;
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- run once on mount / when motion pref resolves
+    setPhase("opening");
+    timers.current.push(
+      window.setTimeout(() => setPhase("letter"), 1400),
+    );
   }, [reduceMotion]);
+
+  // If user tapped before preload finished, open as soon as ready
+  useEffect(() => {
+    if (assetsReady && openRequested.current && phase === "idle") {
+      setWaitingOnAssets(false);
+      finishOpen();
+    }
+  }, [assetsReady, phase, finishOpen]);
+
+  useEffect(() => clearTimers, []);
+
+  const requestOpen = () => {
+    if (phase !== "idle") return;
+    openRequested.current = true;
+    if (!assetsReady) {
+      setWaitingOnAssets(true);
+      return;
+    }
+    finishOpen();
+  };
 
   const close = () => {
     clearTimers();
+    openRequested.current = false;
+    setWaitingOnAssets(false);
     setPhase("idle");
     window.scrollTo({ top: 0 });
-    // Replay open after a short beat so “Πίσω” still feels cinematic
-    timers.current.push(
-      window.setTimeout(() => {
-        setPhase("idle");
-        startOpenSequence();
-      }, 400),
-    );
   };
 
   if (phase === "letter") {
@@ -54,6 +80,9 @@ export function Envelope() {
   }
 
   const opening = phase === "opening";
+  const statusLabel = waitingOnAssets
+    ? "Φόρτωση…"
+    : wedding.openCta;
 
   return (
     <div className="atmosphere relative flex min-h-dvh items-center justify-center overflow-hidden px-4 py-8 md:px-8">
@@ -63,8 +92,12 @@ export function Envelope() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
       >
-        <div
-          className="relative mx-auto aspect-[3/4] w-full"
+        <button
+          type="button"
+          onClick={requestOpen}
+          disabled={opening}
+          aria-label={wedding.openCta}
+          className="relative mx-auto block aspect-[3/4] w-full cursor-pointer touch-manipulation text-left disabled:cursor-default"
           style={{ perspective: "1400px" }}
         >
           <div className="absolute inset-0 overflow-hidden rounded-[1.25rem] bg-[#ebe4db] shadow-[0_24px_60px_rgb(23_20_18/0.14)] ring-1 ring-black/5">
@@ -120,18 +153,13 @@ export function Envelope() {
               </p>
             </motion.div>
           </div>
+        </button>
 
-          {!opening ? (
-            <motion.p
-              className="font-ui absolute inset-x-0 -bottom-10 text-center text-xs tracking-[0.18em] text-ink-soft uppercase"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: [0.35, 0.85, 0.35] }}
-              transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-            >
-              Άνοιγμα…
-            </motion.p>
-          ) : null}
-        </div>
+        {!opening ? (
+          <p className="font-ui mt-6 text-center text-xs tracking-[0.18em] text-ink-soft uppercase">
+            {statusLabel}
+          </p>
+        ) : null}
       </motion.div>
     </div>
   );

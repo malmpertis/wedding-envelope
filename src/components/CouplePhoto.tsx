@@ -1,41 +1,24 @@
 "use client";
 
-import { useState } from "react";
 import { wedding } from "@/content/wedding";
 
 export function CouplePhoto() {
-  const [failed, setFailed] = useState(false);
-
-  if (failed) {
-    return (
-      <div className="mx-auto mt-10 flex aspect-[4/3] w-full max-w-sm items-center justify-center border border-[var(--line)] bg-surface-soft">
-        <div className="px-6 text-center">
-          <img
-            src="/icons/rings.svg"
-            alt=""
-            width={72}
-            height={44}
-            className="mx-auto mb-3 opacity-60"
-          />
-          <p className="font-script text-2xl text-ink-soft">
-            {wedding.welcomeScript}
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="mx-auto mt-10 w-full max-w-sm overflow-hidden border border-[var(--line)]">
+    <figure className="w-full overflow-hidden">
       <img
         src="/couple.jpg"
         alt={wedding.namesJoined}
-        className="aspect-[4/3] w-full object-cover"
-        onError={() => setFailed(true)}
+        width={1080}
+        height={1350}
+        decoding="async"
+        // Preloaded during envelope intro — keep eager so first paint is instant
+        loading="eager"
+        fetchPriority="high"
+        className="aspect-[4/5] w-full object-cover object-[center_22%] md:aspect-[5/4] md:object-[center_18%]"
       />
-      <p className="bg-surface-soft px-4 py-3 text-center font-script text-xl text-ink">
+      <figcaption className="border-b border-[var(--line)] bg-surface px-4 py-4 text-center font-script text-xl text-ink sm:text-2xl">
         {wedding.welcomeScript}
-      </p>
-    </div>
+      </figcaption>
+    </figure>
   );
 }
