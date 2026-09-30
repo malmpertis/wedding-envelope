@@ -170,13 +170,6 @@ export function InvitationLetter({
               {wedding.music.creditLabel}
             </a>
           </p>
-          <button
-            type="button"
-            onClick={onClose}
-            className="font-ui mt-6 min-h-11 touch-manipulation text-sm tracking-[0.16em] text-accent uppercase"
-          >
-            {wedding.backToEnvelope}
-          </button>
 
           <a
             href={wedding.maker.instagramUrl}

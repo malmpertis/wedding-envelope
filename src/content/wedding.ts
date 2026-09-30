@@ -105,7 +105,6 @@ export const wedding = {
   openCta: "Πατήστε για άνοιγμα",
   mapLabel: "Χάρτης",
   closeEnvelope: "Κλείσιμο",
-  backToEnvelope: "Πίσω",
   countdownLabels: {
     days: "ΗΜΕΡΕΣ",
     hours: "ΩΡΕΣ",
