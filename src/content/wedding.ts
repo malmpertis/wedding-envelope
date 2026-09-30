@@ -49,9 +49,10 @@ export const wedding = {
       width: 720,
       height: 895,
     },
-    // Directions-ready: opens Google Maps with navigation to this pin
+    // Directions-ready — destination as address/place name (not lat/lng)
     mapsUrl:
-      "https://www.google.com/maps/dir/?api=1&destination=37.9386549,23.6400525",
+      "https://www.google.com/maps/dir/?api=1&destination=" +
+      encodeURIComponent("Ιερός Ναός Αγίου Νικολάου, Πειραιάς"),
     mapImage: "/maps/ceremony.jpg",
   },
   prep: {
@@ -61,7 +62,8 @@ export const wedding = {
       blurb: "Οι πιο όμορφες στιγμές ξεκινούν λίγο πριν το μυστήριο.",
       address: "Κεφαλληνίας 24, Πειραιάς",
       mapsUrl:
-        "https://www.google.com/maps/dir/?api=1&destination=37.9515922,23.6580413",
+        "https://www.google.com/maps/dir/?api=1&destination=" +
+        encodeURIComponent("Κεφαλληνίας 24, Πειραιάς"),
       mapImage: "/maps/prep-bride.jpg",
     },
     groom: {
@@ -69,7 +71,8 @@ export const wedding = {
       blurb: "Με χαμόγελα, φίλους και πολλή αγάπη.",
       address: "Μυκόνου 29, Πειραιάς",
       mapsUrl:
-        "https://www.google.com/maps/dir/?api=1&destination=37.9549259,23.6645582",
+        "https://www.google.com/maps/dir/?api=1&destination=" +
+        encodeURIComponent("Μυκόνου 29, Πειραιάς"),
       mapImage: "/maps/prep-groom.jpg",
     },
   },
@@ -86,7 +89,8 @@ export const wedding = {
       height: 683,
     },
     mapsUrl:
-      "https://www.google.com/maps/dir/?api=1&destination=37.9729542,23.7005224",
+      "https://www.google.com/maps/dir/?api=1&destination=" +
+      encodeURIComponent("Κτήμα Terra Verde, Ταύρος"),
     mapImage: "/maps/reception.jpg",
   },
   rsvp: {
