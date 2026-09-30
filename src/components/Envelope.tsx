@@ -190,21 +190,14 @@ export function Envelope() {
               layout={layoutActive}
               className={
                 sheetExpanded
-                  ? `relative w-full md:my-10 md:rounded-2xl md:shadow-[0_20px_60px_rgb(23_20_18/0.1)] md:ring-1 md:ring-black/5 ${
+                  ? `relative w-full bg-surface md:my-10 md:rounded-2xl md:shadow-[0_20px_60px_rgb(23_20_18/0.1)] md:ring-1 md:ring-black/5 ${
                       phase === "opening"
                         ? "overflow-hidden"
                         : "overflow-x-clip"
                     }`
-                  : "relative aspect-[3/4] w-full overflow-hidden rounded-[1.25rem] shadow-[0_24px_60px_rgb(23_20_18/0.14)] ring-1 ring-black/5"
+                  : "relative aspect-[3/4] w-full overflow-hidden rounded-[1.25rem] bg-surface shadow-[0_24px_60px_rgb(23_20_18/0.14)] ring-1 ring-black/5"
               }
-              initial={false}
-              animate={{
-                backgroundColor: sheetExpanded ? LETTER_BG : ENVELOPE_BG,
-              }}
-              transition={{
-                layout: { duration: EXPAND_MS / 1000, ease },
-                backgroundColor: { duration: 0.7, ease },
-              }}
+              transition={{ layout: { duration: EXPAND_MS / 1000, ease } }}
               style={idle || showOpeningFlap ? { perspective: 1400 } : undefined}
             >
               <AnimatePresence>
@@ -314,7 +307,6 @@ export function Envelope() {
                 width: closeFrom.width,
                 height: closeFrom.height,
                 borderRadius: closeFrom.width >= 560 ? 16 : 0,
-                backgroundColor: LETTER_BG,
               }}
               animate={{
                 top: closeTo.top,
@@ -322,20 +314,15 @@ export function Envelope() {
                 width: closeTo.width,
                 height: closeTo.height,
                 borderRadius: 20,
-                backgroundColor: ENVELOPE_BG,
               }}
               transition={{ duration: CLOSE_MS / 1000, ease }}
-              style={{ position: "fixed", zIndex: 60, perspective: 1400 }}
+              style={{
+                position: "fixed",
+                zIndex: 60,
+                perspective: 1400,
+                backgroundColor: LETTER_BG,
+              }}
             >
-              {/* Lightweight stand-in — never remount the full letter on close */}
-              <motion.div
-                className="absolute inset-0 origin-top"
-                style={{ backgroundColor: LETTER_BG }}
-                initial={{ opacity: 1 }}
-                animate={{ opacity: 0 }}
-                transition={{ duration: 0.35, ease }}
-              />
-
               {/* Pocket + names fade in under the folding flap */}
               <motion.div
                 className="absolute inset-0"
@@ -396,6 +383,13 @@ function ClosedEnvelopeFace({
 }) {
   const inner = (
     <>
+      {/* Darker envelope paper lives only on this chrome layer — sheet stay surface */}
+      <div
+        aria-hidden
+        className="absolute inset-0"
+        style={{ backgroundColor: ENVELOPE_BG }}
+      />
+
       <div className="absolute inset-[9%] flex flex-col justify-end rounded-md bg-surface px-5 pb-7 pt-6 sm:inset-[10%] sm:px-6 sm:pb-8">
         <div className="text-center">
           <p className="font-script text-2xl leading-snug text-ink sm:text-3xl">
