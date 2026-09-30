@@ -11,6 +11,8 @@ export const SECONDARY_ASSETS = [
   asset("/icons/rings.svg"),
   asset("/icons/church.svg"),
   asset("/icons/venue.svg"),
+  asset("/venues/church.webp"),
+  asset("/venues/reception.webp"),
   asset("/maps/ceremony.jpg"),
   asset("/maps/reception.jpg"),
   asset("/maps/prep-groom.jpg"),

@@ -72,6 +72,7 @@ export function InvitationLetter({ onClose }: InvitationLetterProps) {
             subtitle={wedding.ceremony.subtitle}
             place={wedding.ceremony.place}
             detail={wedding.ceremony.detail}
+            photo={wedding.ceremony.photo}
             mapImage={wedding.ceremony.mapImage}
             mapsUrl={wedding.ceremony.mapsUrl}
             iconSrc="/icons/church.svg"
@@ -86,6 +87,7 @@ export function InvitationLetter({ onClose }: InvitationLetterProps) {
             subtitle={wedding.reception.subtitle}
             place={wedding.reception.place}
             detail={wedding.reception.detail}
+            photo={wedding.reception.photo}
             mapImage={wedding.reception.mapImage}
             mapsUrl={wedding.reception.mapsUrl}
             iconSrc="/icons/venue.svg"

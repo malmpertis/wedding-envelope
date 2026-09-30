@@ -3,11 +3,19 @@ import { MapEmbed } from "@/components/MapEmbed";
 import { wedding } from "@/content/wedding";
 import { asset } from "@/lib/paths";
 
+type PlacePhoto = {
+  webp: string;
+  jpg: string;
+  width: number;
+  height: number;
+};
+
 type LocationCardProps = {
   title: string;
   subtitle?: string;
   place: string;
   detail: string;
+  photo?: PlacePhoto;
   mapImage: string;
   mapsUrl: string;
   iconSrc: string;
@@ -18,6 +26,7 @@ export function LocationCard({
   subtitle,
   place,
   detail,
+  photo,
   mapImage,
   mapsUrl,
   iconSrc,
@@ -45,7 +54,24 @@ export function LocationCard({
           {detail}
         </p>
 
-        <div className="mt-8 w-full">
+        {photo ? (
+          <figure className="mt-8 w-full overflow-hidden">
+            <picture>
+              <source srcSet={asset(photo.webp)} type="image/webp" />
+              <img
+                src={asset(photo.jpg)}
+                alt={place}
+                width={photo.width}
+                height={photo.height}
+                decoding="async"
+                loading="lazy"
+                className="h-auto w-full object-cover"
+              />
+            </picture>
+          </figure>
+        ) : null}
+
+        <div className={photo ? "mt-5 w-full" : "mt-8 w-full"}>
           <MapEmbed title={place} imageSrc={mapImage} />
         </div>
 
