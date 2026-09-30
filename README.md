@@ -29,6 +29,15 @@ Couple photo: `public/couple.webp` + `public/couple.jpg` (keep both in sync when
 
 Ambient music uses a **hidden YouTube player** (sound only). Set `music.youtubeVideoId` in `wedding.ts` — default is Alex-Productions *Romantic Day* (royalty-free / CC BY). Mute toggle is the floating speaker button.
 
+Map previews are **static images** (not Google embeds): Esri World Topo tiles, stone-toned and zoomed in, with an ink pin. Regenerate with:
+
+```bash
+pip install staticmap pillow
+python3 scripts/generate-maps.py
+```
+
+The **Χάρτης** button still opens Google Maps for turn-by-turn directions.
+
 ## Free hosting — GitHub Pages + subdomain
 
 Cost: **$0** (GitHub free + your existing domain).
@@ -69,4 +78,4 @@ Guests then open: **https://gamos.almpertis.com**
 
 - Next.js (static export) · TypeScript · Tailwind CSS · Framer Motion
 - Google Fonts: Cormorant Garamond (Greek)
-- Maps: Google Maps embed iframes (no API key)
+- Maps: static Esri/OSM previews + Google Maps links (no API key)

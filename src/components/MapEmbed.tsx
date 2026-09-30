@@ -20,8 +20,8 @@ export function MapEmbed({
       <img
         src={imageSrc}
         alt={`Χάρτης: ${title}`}
-        width={800}
-        height={480}
+        width={1125}
+        height={600}
         decoding="async"
         loading="eager"
         draggable={false}
