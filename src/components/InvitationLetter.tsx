@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { wedding } from "@/content/wedding";
 import { Countdown } from "@/components/Countdown";
 import { CouplePhoto } from "@/components/CouplePhoto";
@@ -15,15 +14,21 @@ import { ScrollTopButton } from "@/components/ScrollTopButton";
 
 type InvitationLetterProps = {
   onClose: () => void;
+  /** When true, shell chrome is provided by Envelope’s expanding sheet */
+  embedded?: boolean;
 };
 
-export function InvitationLetter({ onClose }: InvitationLetterProps) {
+export function InvitationLetter({
+  onClose,
+  embedded = false,
+}: InvitationLetterProps) {
   return (
-    <motion.div
-      className="relative mx-auto min-h-dvh w-full max-w-xl overflow-x-clip bg-surface md:my-10 md:min-h-0 md:rounded-2xl md:shadow-[0_20px_60px_rgb(23_20_18/0.1)] md:ring-1 md:ring-black/5"
-      initial={{ opacity: 0, y: 28 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+    <div
+      className={
+        embedded
+          ? "relative min-h-dvh w-full overflow-x-clip md:min-h-0"
+          : "relative mx-auto min-h-dvh w-full max-w-xl overflow-x-clip bg-surface md:my-10 md:min-h-0 md:rounded-2xl md:shadow-[0_20px_60px_rgb(23_20_18/0.1)] md:ring-1 md:ring-black/5"
+      }
     >
       <div className="letter-surface relative pb-16 text-ink">
         <div className="flex items-center justify-between px-5 pt-5 sm:px-8">
@@ -206,7 +211,7 @@ export function InvitationLetter({ onClose }: InvitationLetterProps) {
       </div>
 
       <ScrollTopButton />
-    </motion.div>
+    </div>
   );
 }
 
