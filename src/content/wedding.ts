@@ -100,6 +100,18 @@ export const wedding = {
     minutes: "ΛΕΠΤΑ",
     seconds: "ΔΕΥΤΕΡΟΛΕΠΤΑ",
   },
+  /**
+   * Ambient music via a hidden YouTube player (audio only).
+   * Swap youtubeVideoId for any royalty-free / CC track you prefer.
+   */
+  music: {
+    youtubeVideoId: "yOFgvhYRcY8",
+    volume: 35,
+    title: "Romantic Day",
+    artist: "Alex-Productions",
+    creditUrl: "https://www.youtube.com/watch?v=yOFgvhYRcY8",
+    creditLabel: "Μουσική: Romantic Day — Alex-Productions",
+  },
 } as const;
 
 export type WeddingContent = typeof wedding;

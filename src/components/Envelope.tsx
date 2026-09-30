@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { wedding } from "@/content/wedding";
+import { useInvitationAudio } from "@/components/AudioControls";
 import { InvitationLetter } from "@/components/InvitationLetter";
 import { Monogram } from "@/components/Monogram";
 import {
@@ -14,6 +15,7 @@ const OPEN_ANIM_MS = 850;
 
 export function Envelope() {
   const reduceMotion = useReducedMotion();
+  const { unlockAndPlay } = useInvitationAudio();
   const [phase, setPhase] = useState<"idle" | "opening" | "letter">("idle");
   const [criticalReady, setCriticalReady] = useState(false);
   const openRequested = useRef(false);
@@ -61,6 +63,8 @@ export function Envelope() {
   const requestOpen = () => {
     if (phase !== "idle") return;
     openRequested.current = true;
+    // User gesture — start royalty-free YouTube audio (hidden player)
+    unlockAndPlay();
     const startedAt = performance.now();
 
     // Always start the flap immediately so the UI doesn't feel stuck

@@ -143,6 +143,16 @@ export function InvitationLetter({ onClose }: InvitationLetterProps) {
           <p className="font-ui mt-2 text-sm tracking-[0.18em] text-ink-soft">
             {wedding.dateDisplay}
           </p>
+          <p className="font-ui mt-5 text-[0.7rem] tracking-wide text-ink-soft/80">
+            <a
+              href={wedding.music.creditUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline decoration-[var(--line)] underline-offset-4 transition hover:text-accent"
+            >
+              {wedding.music.creditLabel}
+            </a>
+          </p>
           <button
             type="button"
             onClick={onClose}

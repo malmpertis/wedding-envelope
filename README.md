@@ -27,6 +27,8 @@ Set `contactEmail` there so RSVP / wishes open the guest’s mail app to your ad
 
 Couple photo: `public/couple.webp` + `public/couple.jpg` (keep both in sync when replacing).
 
+Ambient music uses a **hidden YouTube player** (sound only). Set `music.youtubeVideoId` in `wedding.ts` — default is Alex-Productions *Romantic Day* (royalty-free / CC BY). Mute toggle is the floating speaker button.
+
 ## Free hosting — GitHub Pages + subdomain
 
 Cost: **$0** (GitHub free + your existing domain).

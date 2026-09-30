@@ -13,7 +13,6 @@ export const SECONDARY_ASSETS = [
   "/maps/reception.jpg",
   "/maps/prep-groom.jpg",
   "/maps/prep-bride.jpg",
-  "/audio/ambient.mp3",
 ] as const;
 
 function loadImage(src: string): Promise<void> {

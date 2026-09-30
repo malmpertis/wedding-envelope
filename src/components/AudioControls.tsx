@@ -9,6 +9,8 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { wedding } from "@/content/wedding";
+import { loadYouTubeIframeAPI, type YTPlayer } from "@/lib/youtube";
 
 type AudioContextValue = {
   muted: boolean;
@@ -27,47 +29,123 @@ export function useInvitationAudio() {
   return ctx;
 }
 
+const PLAYER_HOST_ID = "wedding-yt-audio";
+
 export function AudioProvider({ children }: { children: ReactNode }) {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const playerRef = useRef<YTPlayer | null>(null);
+  const wantSoundRef = useRef(false);
   const [muted, setMuted] = useState(true);
   const [unlocked, setUnlocked] = useState(false);
 
-  useEffect(() => {
-    const audio = new Audio("/audio/ambient.mp3");
-    audio.loop = true;
-    audio.volume = 0.35;
-    audio.muted = true;
-    audioRef.current = audio;
-    return () => {
-      audio.pause();
-      audioRef.current = null;
-    };
+  const applyPlayback = useCallback((playUnmuted: boolean) => {
+    const player = playerRef.current;
+    if (!player) return;
+    player.setVolume(wedding.music.volume);
+    if (playUnmuted) {
+      player.unMute();
+      player.playVideo();
+    } else {
+      player.mute();
+    }
   }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    let player: YTPlayer | null = null;
+
+    document.getElementById(PLAYER_HOST_ID)?.remove();
+
+    const mount = document.createElement("div");
+    mount.id = PLAYER_HOST_ID;
+    mount.setAttribute("aria-hidden", "true");
+    // Real iframe footprint off-screen — YouTube audio only, no visible video.
+    mount.style.cssText =
+      "position:fixed;width:240px;height:135px;left:-9999px;top:0;overflow:hidden;opacity:0;pointer-events:none;z-index:-1;";
+    const target = document.createElement("div");
+    mount.appendChild(target);
+    document.body.appendChild(mount);
+
+    void loadYouTubeIframeAPI()
+      .then((YT) => {
+        if (cancelled) return;
+        player = new YT.Player(target, {
+          videoId: wedding.music.youtubeVideoId,
+          width: 240,
+          height: 135,
+          playerVars: {
+            autoplay: 0,
+            controls: 0,
+            disablekb: 1,
+            fs: 0,
+            modestbranding: 1,
+            playsinline: 1,
+            rel: 0,
+            loop: 1,
+            playlist: wedding.music.youtubeVideoId,
+            origin: window.location.origin,
+          },
+          events: {
+            onReady: (event) => {
+              if (cancelled) return;
+              playerRef.current = event.target;
+              event.target.setVolume(wedding.music.volume);
+              event.target.mute();
+              if (wantSoundRef.current) {
+                applyPlayback(true);
+              }
+            },
+            onStateChange: (event) => {
+              if (
+                event.data === YT.PlayerState.ENDED &&
+                wantSoundRef.current &&
+                !cancelled
+              ) {
+                event.target.playVideo();
+              }
+            },
+          },
+        });
+      })
+      .catch(() => {
+        /* Mute control remains; playback no-ops until API loads */
+      });
+
+    return () => {
+      cancelled = true;
+      playerRef.current = null;
+      try {
+        player?.destroy();
+      } catch {
+        /* ignore */
+      }
+      mount.remove();
+    };
+  }, [applyPlayback]);
 
   const unlockAndPlay = useCallback(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
+    wantSoundRef.current = true;
     setUnlocked(true);
     setMuted(false);
-    audio.muted = false;
-    void audio.play().catch(() => {
-      setMuted(true);
-      audio.muted = true;
-    });
-  }, []);
+    applyPlayback(true);
+  }, [applyPlayback]);
 
   const toggleMute = useCallback(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
     if (!unlocked) {
       unlockAndPlay();
       return;
     }
     setMuted((prev) => {
       const next = !prev;
-      audio.muted = next;
-      if (!next) {
-        void audio.play().catch(() => undefined);
+      wantSoundRef.current = !next;
+      const player = playerRef.current;
+      if (player) {
+        player.setVolume(wedding.music.volume);
+        if (next) {
+          player.mute();
+        } else {
+          player.unMute();
+          player.playVideo();
+        }
       }
       return next;
     });
@@ -88,6 +166,7 @@ export function MuteButton() {
       type="button"
       onClick={toggleMute}
       aria-label={muted ? "Ενεργοποίηση ήχου" : "Σίγαση ήχου"}
+      title={muted ? "Ενεργοποίηση ήχου" : "Σίγαση ήχου"}
       className="fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-[max(1.25rem,env(safe-area-inset-right))] z-50 flex h-11 w-11 touch-manipulation items-center justify-center rounded-full bg-ink/70 text-surface backdrop-blur-sm transition hover:bg-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
     >
       {muted ? (
