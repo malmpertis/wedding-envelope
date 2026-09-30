@@ -19,7 +19,7 @@ type InvitationLetterProps = {
 export function InvitationLetter({ onClose }: InvitationLetterProps) {
   return (
     <motion.div
-      className="relative mx-auto min-h-dvh w-full max-w-xl overflow-x-hidden bg-surface md:my-10 md:min-h-0 md:rounded-2xl md:shadow-[0_20px_60px_rgb(23_20_18/0.1)] md:ring-1 md:ring-black/5"
+      className="relative mx-auto min-h-dvh w-full max-w-xl overflow-x-clip bg-surface md:my-10 md:min-h-0 md:rounded-2xl md:shadow-[0_20px_60px_rgb(23_20_18/0.1)] md:ring-1 md:ring-black/5"
       initial={{ opacity: 0, y: 28 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
@@ -52,10 +52,8 @@ export function InvitationLetter({ onClose }: InvitationLetterProps) {
           </p>
         </Reveal>
 
-        {/* Portrait as the first visual beat after the brand */}
-        <Reveal>
-          <CouplePhoto />
-        </Reveal>
+        {/* Portrait outside Reveal so parent transforms don't kill parallax */}
+        <CouplePhoto />
 
         <Reveal>
           <section className="border-y border-[var(--line)] bg-surface-soft/80 px-4 py-10 sm:px-10">
