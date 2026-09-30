@@ -101,11 +101,25 @@ export function Envelope() {
           style={{ perspective: "1400px" }}
         >
           <div className="absolute inset-0 overflow-hidden rounded-[1.25rem] bg-[#ebe4db] shadow-[0_24px_60px_rgb(23_20_18/0.14)] ring-1 ring-black/5">
-            <div className="absolute inset-[10%] rounded-md bg-surface" />
+            {/* Inner paper — names live here so they never sit on the beige rim */}
+            <div className="absolute inset-[9%] flex flex-col justify-end rounded-md bg-surface px-5 pb-7 pt-6 sm:inset-[10%] sm:px-6 sm:pb-8">
+              <motion.div
+                className="relative z-10 text-center"
+                animate={opening ? { opacity: 0, y: 12 } : { opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <p className="font-script text-2xl leading-snug text-ink sm:text-3xl">
+                  {wedding.namesJoined}
+                </p>
+                <p className="font-ui mt-3 text-[0.7rem] tracking-[0.22em] text-ink-soft uppercase">
+                  {wedding.dateShort}
+                </p>
+              </motion.div>
+            </div>
 
             <div
               aria-hidden
-              className="absolute inset-0 opacity-40"
+              className="pointer-events-none absolute inset-0 z-[15] opacity-40"
               style={{
                 background:
                   "linear-gradient(to top right, transparent 46%, rgb(23 20 18 / 0.06) 50%, transparent 54%), linear-gradient(to top left, transparent 46%, rgb(23 20 18 / 0.06) 50%, transparent 54%)",
@@ -138,19 +152,6 @@ export function Envelope() {
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
               <Monogram size={108} />
-            </motion.div>
-
-            <motion.div
-              className="absolute inset-x-0 bottom-10 z-10 px-6 text-center"
-              animate={opening ? { opacity: 0, y: 12 } : { opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <p className="font-script text-2xl text-ink sm:text-3xl">
-                {wedding.namesJoined}
-              </p>
-              <p className="font-ui mt-3 text-[0.7rem] tracking-[0.22em] text-ink-soft uppercase">
-                {wedding.dateShort}
-              </p>
             </motion.div>
           </div>
         </button>
