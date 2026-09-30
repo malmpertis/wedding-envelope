@@ -39,16 +39,10 @@ export function InvitationLetter({
       className={
         embedded
           ? "relative w-full overflow-x-clip"
-          : "relative mx-auto min-h-dvh w-full max-w-xl overflow-x-clip bg-surface md:my-10 md:min-h-0 md:rounded-2xl md:shadow-[0_20px_60px_rgb(23_20_18/0.1)] md:ring-1 md:ring-black/5"
+          : "relative mx-auto min-h-dvh w-full max-w-xl overflow-x-clip bg-surface md:my-10 md:min-h-0 md:rounded-2xl md:shadow-[0_24px_60px_rgb(23_20_18/0.14)] md:ring-1 md:ring-black/5"
       }
     >
-      <div
-        className={
-          embedded
-            ? "relative pb-16 text-ink"
-            : "letter-surface relative pb-16 text-ink"
-        }
-      >
+      <div className="letter-surface relative pb-16 text-ink">
         <div className="flex items-center justify-between px-5 pt-5 sm:px-8">
           <Monogram size={48} />
           <button

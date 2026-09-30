@@ -190,24 +190,17 @@ export function Envelope() {
               layout={layoutActive}
               className={
                 sheetExpanded
-                  ? `relative w-full ${
-                      phase === "opening"
-                        ? "overflow-hidden bg-surface"
-                        : "overflow-x-clip bg-transparent"
+                  ? `relative w-full overflow-x-clip bg-surface md:my-10 md:rounded-2xl md:ring-1 md:ring-black/5 ${
+                      phase === "opening" ? "overflow-hidden" : ""
                     }`
                   : "relative aspect-[3/4] w-full overflow-hidden rounded-[1.25rem] bg-surface ring-1 ring-black/5"
               }
               initial={false}
               animate={{
-                // Soften the floating card shadow out — don’t hard-cut it on open
-                boxShadow: sheetExpanded
-                  ? "0 0 0 rgb(23 20 18 / 0)"
-                  : "0 24px 60px rgb(23 20 18 / 0.14)",
+                // Same floating card shadow closed + open — only the shape changes
+                boxShadow: "0 24px 60px rgb(23 20 18 / 0.14)",
               }}
-              transition={{
-                layout: { duration: EXPAND_MS / 1000, ease },
-                boxShadow: { duration: 0.85, ease },
-              }}
+              transition={{ layout: { duration: EXPAND_MS / 1000, ease } }}
               style={idle || showOpeningFlap ? { perspective: 1400 } : undefined}
             >
               <AnimatePresence>
@@ -316,7 +309,7 @@ export function Envelope() {
                 width: closeFrom.width,
                 height: closeFrom.height,
                 borderRadius: closeFrom.width >= 560 ? 16 : 0,
-                boxShadow: "0 0 0 rgb(23 20 18 / 0)",
+                boxShadow: "0 24px 60px rgb(23 20 18 / 0.14)",
               }}
               animate={{
                 top: closeTo.top,
