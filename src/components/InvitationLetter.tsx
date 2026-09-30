@@ -163,6 +163,45 @@ export function InvitationLetter({ onClose }: InvitationLetterProps) {
           >
             {wedding.backToEnvelope}
           </button>
+
+          <a
+            href={wedding.maker.instagramUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${wedding.maker.line} — ${wedding.maker.instagramLabel}`}
+            className="font-ui mt-10 flex flex-col items-center gap-3 border-t border-[var(--line)] px-2 pb-2 pt-8 text-ink-soft/80 transition hover:text-accent"
+          >
+            <span className="text-center text-[0.75rem] tracking-wide">
+              {wedding.maker.line}
+            </span>
+            <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--line)] transition hover:border-accent">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden
+              >
+                <rect
+                  x="3.5"
+                  y="3.5"
+                  width="17"
+                  height="17"
+                  rx="5"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                />
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="4"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                />
+                <circle cx="17.2" cy="6.8" r="1" fill="currentColor" />
+              </svg>
+            </span>
+          </a>
         </footer>
       </div>
 
