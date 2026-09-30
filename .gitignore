@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# create-next-app agent sidecars
+AGENTS.md
+CLAUDE.md
