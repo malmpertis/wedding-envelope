@@ -2,25 +2,52 @@
 
 import { useState, type FormEvent } from "react";
 import { wedding } from "@/content/wedding";
-
-function openMailto(subject: string, body: string) {
-  const email = wedding.contactEmail.trim();
-  const url = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  window.location.href = url;
-}
+import {
+  formsConfigured,
+  submitToSheet,
+  type FormStatus,
+} from "@/lib/forms";
 
 const fieldClass =
-  "font-ui mt-2 w-full border border-[var(--line)] bg-white px-3 py-3 text-base text-ink outline-none transition focus:border-accent";
+  "font-ui mt-2 w-full border border-[var(--line)] bg-white px-3 py-3 text-base text-ink outline-none transition focus:border-accent disabled:opacity-60";
 
 const submitButtonClass =
-  "font-ui flex min-h-12 w-full touch-manipulation items-center justify-center border border-ink bg-transparent px-4 text-sm tracking-[0.14em] text-ink uppercase transition hover:bg-ink hover:text-surface";
+  "font-ui flex min-h-12 w-full touch-manipulation items-center justify-center border border-ink bg-transparent px-4 text-sm tracking-[0.14em] text-ink uppercase transition hover:bg-ink hover:text-surface disabled:pointer-events-none disabled:opacity-50";
+
+function StatusMessage({ status }: { status: FormStatus }) {
+  if (status === "submitting") {
+    return (
+      <p className="font-ui text-center text-sm text-ink-soft">Αποστολή…</p>
+    );
+  }
+  if (status === "success") {
+    return (
+      <p className="font-ui text-center text-sm text-ink">
+        Ευχαριστούμε — το μήνυμά σας καταχωρήθηκε.
+      </p>
+    );
+  }
+  if (status === "error") {
+    return (
+      <p className="font-ui text-center text-sm text-ink">
+        {formsConfigured()
+          ? "Κάτι πήγε στραβά. Δοκιμάστε ξανά σε λίγο."
+          : "Η φόρμα δεν είναι ακόμα συνδεδεμένη με το φύλλο Google."}
+      </p>
+    );
+  }
+  return null;
+}
 
 export function RsvpForm() {
-  const [status, setStatus] = useState<"idle" | "ready">("idle");
+  const [status, setStatus] = useState<FormStatus>("idle");
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
+    if (status === "submitting") return;
+
+    const form = e.currentTarget;
+    const data = new FormData(form);
     const name = String(data.get("name") || "").trim();
     const phone = String(data.get("phone") || "").trim();
     const attendance = String(data.get("attendance") || "");
@@ -31,19 +58,22 @@ export function RsvpForm() {
       wedding.rsvp.attendanceOptions.find((o) => o.value === attendance)
         ?.label || attendance;
 
-    const body = [
-      `Ονοματεπώνυμο: ${name}`,
-      `Τηλέφωνο: ${phone}`,
-      `Παρουσία: ${attendanceLabel}`,
-      `Άτομα: ${guests}`,
-      `Παιδιά (έως 6 ετών): ${children}`,
-      notes ? `Σημειώσεις: ${notes}` : "",
-    ]
-      .filter(Boolean)
-      .join("\n");
-
-    openMailto(`RSVP — ${name || wedding.namesJoined}`, body);
-    setStatus("ready");
+    setStatus("submitting");
+    try {
+      await submitToSheet({
+        type: "rsvp",
+        name,
+        phone,
+        attendance: attendanceLabel,
+        guests,
+        children,
+        notes,
+      });
+      setStatus("success");
+      form.reset();
+    } catch {
+      setStatus("error");
+    }
   };
 
   return (
@@ -66,7 +96,13 @@ export function RsvpForm() {
       >
         <label className="font-ui block text-sm font-semibold text-ink">
           Ονοματεπώνυμο
-          <input name="name" required className={fieldClass} autoComplete="name" />
+          <input
+            name="name"
+            required
+            className={fieldClass}
+            autoComplete="name"
+            disabled={status === "submitting"}
+          />
         </label>
         <label className="font-ui block text-sm font-semibold text-ink">
           Τηλέφωνο
@@ -75,9 +111,10 @@ export function RsvpForm() {
             type="tel"
             className={fieldClass}
             autoComplete="tel"
+            disabled={status === "submitting"}
           />
         </label>
-        <fieldset className="space-y-2">
+        <fieldset className="space-y-2" disabled={status === "submitting"}>
           <legend className="font-ui text-sm font-semibold text-ink">
             Θα παρευρεθείτε στη δεξίωση;
           </legend>
@@ -106,6 +143,7 @@ export function RsvpForm() {
               min={0}
               inputMode="numeric"
               className={fieldClass}
+              disabled={status === "submitting"}
             />
           </label>
           <label className="font-ui block text-sm font-semibold text-ink">
@@ -116,39 +154,52 @@ export function RsvpForm() {
               min={0}
               inputMode="numeric"
               className={fieldClass}
+              disabled={status === "submitting"}
             />
           </label>
         </div>
         <label className="font-ui block text-sm font-semibold text-ink">
           Θέλετε να γνωρίζουμε κάτι:
-          <textarea name="notes" rows={3} className={fieldClass} />
+          <textarea
+            name="notes"
+            rows={3}
+            className={fieldClass}
+            disabled={status === "submitting"}
+          />
         </label>
-        <button type="submit" className={submitButtonClass}>
-          {wedding.rsvp.submit}
+        <button
+          type="submit"
+          className={submitButtonClass}
+          disabled={status === "submitting"}
+        >
+          {status === "submitting" ? "Αποστολή…" : wedding.rsvp.submit}
         </button>
-        {status === "ready" ? (
-          <p className="font-ui text-center text-sm text-ink-soft">
-            Ανοίγει η εφαρμογή email σας για αποστολή.
-          </p>
-        ) : null}
+        <StatusMessage status={status} />
       </form>
     </section>
   );
 }
 
 export function WishesForm() {
-  const [status, setStatus] = useState<"idle" | "ready">("idle");
+  const [status, setStatus] = useState<FormStatus>("idle");
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
+    if (status === "submitting") return;
+
+    const form = e.currentTarget;
+    const data = new FormData(form);
     const name = String(data.get("name") || "").trim();
     const wish = String(data.get("wish") || "").trim();
-    openMailto(
-      `Ευχή — ${name || wedding.namesJoined}`,
-      `Ονοματεπώνυμο: ${name}\n\nΕυχή:\n${wish}`,
-    );
-    setStatus("ready");
+
+    setStatus("submitting");
+    try {
+      await submitToSheet({ type: "wish", name, wish });
+      setStatus("success");
+      form.reset();
+    } catch {
+      setStatus("error");
+    }
   };
 
   return (
@@ -167,20 +218,32 @@ export function WishesForm() {
       >
         <label className="font-ui block text-sm font-semibold text-ink">
           Ονοματεπώνυμο
-          <input name="name" required className={fieldClass} autoComplete="name" />
+          <input
+            name="name"
+            required
+            className={fieldClass}
+            autoComplete="name"
+            disabled={status === "submitting"}
+          />
         </label>
         <label className="font-ui block text-sm font-semibold text-ink">
           Ευχή
-          <textarea name="wish" required rows={4} className={fieldClass} />
+          <textarea
+            name="wish"
+            required
+            rows={4}
+            className={fieldClass}
+            disabled={status === "submitting"}
+          />
         </label>
-        <button type="submit" className={submitButtonClass}>
-          {wedding.wishes.submit}
+        <button
+          type="submit"
+          className={submitButtonClass}
+          disabled={status === "submitting"}
+        >
+          {status === "submitting" ? "Αποστολή…" : wedding.wishes.submit}
         </button>
-        {status === "ready" ? (
-          <p className="font-ui text-center text-sm text-ink-soft">
-            Ανοίγει η εφαρμογή email σας για αποστολή.
-          </p>
-        ) : null}
+        <StatusMessage status={status} />
       </form>
     </section>
   );

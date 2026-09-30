@@ -4,26 +4,29 @@ Greek wedding invitation site with a forest-green envelope open animation, count
 
 **Live URL (after DNS):** [https://gamos.almpertis.com](https://gamos.almpertis.com)
 
-## Local development
+## Local development (on your computer)
 
 ```bash
+git clone https://github.com/malmpertis/wedding-envelope.git
+cd wedding-envelope
 npm install
 npm run dev
 ```
 
-Open [http://127.0.0.1:43127](http://127.0.0.1:43127).
+Open [http://127.0.0.1:43127](http://127.0.0.1:43127) in your browser (this is your machine’s localhost).
 
 ```bash
-npm run build   # static export into /out
+npm run build                 # static export into /out
+npx serve out -l 43127        # preview the production build
 ```
-
 ## Edit wedding details
 
 All Greek copy and map links live in one file:
 
 - [`src/content/wedding.ts`](src/content/wedding.ts)
 
-Set `contactEmail` there so RSVP / wishes open the guest’s mail app to your address (still free — no backend).
+RSVP / wishes use your on-page forms and write to a **Google Sheet** via Apps Script.
+Follow `scripts/google-sheets-apps-script.js`, then set `forms.endpoint` + matching `forms.secret` in `wedding.ts`. Share the Sheet with your cousin.
 
 Couple photo: `public/couple.webp` + `public/couple.jpg` (keep both in sync when replacing).
 

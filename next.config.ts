@@ -12,6 +12,8 @@ const nextConfig: NextConfig = {
     unoptimized: true,
   },
   trailingSlash: true,
+  // Allow Cursor port-forward / tunnel hosts to load Next dev assets
+  allowedDevOrigins: ["127.0.0.1", "localhost", "*.trycloudflare.com"],
   env: {
     // Inlined into client bundles for asset("/…") helpers
     NEXT_PUBLIC_BASE_PATH: basePath,

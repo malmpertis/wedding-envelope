@@ -10,10 +10,21 @@ export const wedding = {
   heroLine:
     "Ενώνουμε τις ζωές μας και θα θέλαμε να είστε μαζί μας σ’ αυτή τη μοναδική στιγμή.",
   /**
-   * Guest RSVP / wishes open the guest’s email app (free, no backend).
-   * Set this to the couple’s real address before sharing the site.
+   * Optional fallback email (unused when forms.endpoint is set).
    */
   contactEmail: "",
+  /**
+   * Google Sheet via Apps Script (see scripts/google-sheets-apps-script.js).
+   * 1) Paste the script into your Sheet → Deploy as Web app (Anyone)
+   * 2) Put the Web app URL in `endpoint`
+   * 3) Use the SAME string for `secret` here and SHARED_SECRET in the script
+   * 4) Share the Sheet with your cousin
+   */
+  forms: {
+    endpoint:
+      "https://script.google.com/macros/s/AKfycby9N0sNt_mgHQhwS8iwaNsuNmPm-iQCavC-YGt0RXks2tWEFYx-k8TBJZAqrC8pPW6r/exec",
+    secret: "wedding-bi-2027-change-me",
+  },
   families: {
     title: "Οι οικογένειές μας",
     footnote:
