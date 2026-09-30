@@ -21,6 +21,8 @@ const LETTER_BG = "#fffcf8";
 /** Tight card lift — large blur blooms into a beige vignette as the sheet grows */
 const SHADOW_ENVELOPE = "0 22px 44px rgb(23 20 18 / 0.12)";
 const SHADOW_LETTER = "0 14px 32px rgb(23 20 18 / 0.08)";
+const FLAP_GRADIENT = `linear-gradient(180deg, #f0e8de 0%, #e2d9cd 100%)`;
+const FLAP_CLIP = "polygon(0 0, 100% 0, 50% 100%)";
 
 type Phase = "idle" | "opening" | "open" | "closing";
 
@@ -245,8 +247,8 @@ export function Envelope() {
                     className="pointer-events-none absolute inset-x-0 top-0 z-40 origin-top"
                     style={{
                       height: "13rem",
-                      clipPath: "polygon(0 0, 100% 0, 50% 100%)",
-                      background: `linear-gradient(180deg, #f4eee6 0%, ${ENVELOPE_BG} 100%)`,
+                      clipPath: FLAP_CLIP,
+                      background: FLAP_GRADIENT,
                       boxShadow: "0 10px 24px rgb(23 20 18 / 0.1)",
                       transformStyle: "preserve-3d",
                       backfaceVisibility: "hidden",
@@ -308,7 +310,7 @@ export function Envelope() {
                 width: closeFrom.width,
                 height: closeFrom.height,
                 borderRadius: closeFrom.width >= 560 ? 16 : 0,
-                boxShadow: "0 24px 60px rgb(23 20 18 / 0.14)",
+                boxShadow: SHADOW_LETTER,
               }}
               animate={{
                 top: closeTo.top,
@@ -316,7 +318,7 @@ export function Envelope() {
                 width: closeTo.width,
                 height: closeTo.height,
                 borderRadius: 20,
-                boxShadow: "0 24px 60px rgb(23 20 18 / 0.14)",
+                boxShadow: SHADOW_ENVELOPE,
               }}
               transition={{ duration: CLOSE_MS / 1000, ease }}
               style={{
@@ -342,8 +344,8 @@ export function Envelope() {
                 className="pointer-events-none absolute inset-x-0 top-0 z-30 origin-top"
                 style={{
                   height: "46%",
-                  clipPath: "polygon(0 0, 100% 0, 50% 100%)",
-                  background: `linear-gradient(180deg, #f4eee6 0%, ${ENVELOPE_BG} 100%)`,
+                  clipPath: FLAP_CLIP,
+                  background: FLAP_GRADIENT,
                   boxShadow: "0 10px 24px rgb(23 20 18 / 0.1)",
                   transformStyle: "preserve-3d",
                   backfaceVisibility: "hidden",
@@ -385,11 +387,15 @@ function ClosedEnvelopeFace({
 }) {
   const inner = (
     <>
-      {/*
-        Card body uses the same surface as the open letter.
-        Only the flap is the darker beige — no full-card fill swap on open.
-      */}
-      <div className="absolute inset-[9%] flex flex-col justify-end rounded-md px-5 pb-7 pt-6 sm:inset-[10%] sm:px-6 sm:pb-8">
+      {/* Envelope paper border — this layer fades with the face, so the open
+          letter keeps its own surface and no page color swap happens. */}
+      <div
+        aria-hidden
+        className="absolute inset-0"
+        style={{ backgroundColor: ENVELOPE_BG }}
+      />
+
+      <div className="absolute inset-[9%] flex flex-col justify-end rounded-md bg-surface px-5 pb-7 pt-6 shadow-[inset_0_0_0_1px_rgb(23_20_18/0.05)] sm:inset-[10%] sm:px-6 sm:pb-8">
         <div className="text-center">
           <p className="font-script text-2xl leading-snug text-ink sm:text-3xl">
             {wedding.namesJoined}
@@ -415,8 +421,8 @@ function ClosedEnvelopeFace({
             className="absolute inset-x-0 top-0 z-20 origin-top"
             style={{
               height: "46%",
-              clipPath: "polygon(0 0, 100% 0, 50% 100%)",
-              background: `linear-gradient(180deg, #f4eee6 0%, ${ENVELOPE_BG} 100%)`,
+              clipPath: FLAP_CLIP,
+              background: FLAP_GRADIENT,
               boxShadow: "0 8px 20px rgb(23 20 18 / 0.08)",
             }}
           />

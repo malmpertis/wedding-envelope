@@ -1,13 +1,13 @@
 import { asset } from "@/lib/paths";
 
 /** Assets to warm while the envelope is closed */
-export const CRITICAL_IMAGES = [
+const CRITICAL_IMAGES = [
   asset("/couple.webp"),
   asset("/couple.jpg"),
   asset("/welcome-script.png"),
 ] as const;
 
-export const SECONDARY_ASSETS = [
+const SECONDARY_ASSETS = [
   asset("/icons/rings.svg"),
   asset("/icons/church.svg"),
   asset("/icons/venue.svg"),
