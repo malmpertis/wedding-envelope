@@ -11,11 +11,7 @@ import {
   preloadSecondaryAssets,
 } from "@/lib/preload";
 
-/** Flap lift — overlaps with the letter rising */
-const FLAP_MS = 820;
-/** When the shell starts growing into the full page (while flap still moves) */
-const EXPAND_AT_MS = 280;
-
+const FLAP_MS = 680;
 const ease = [0.22, 1, 0.36, 1] as const;
 
 type Phase = "idle" | "opening" | "letter";
@@ -54,16 +50,10 @@ export function Envelope() {
     };
   }, [clearTimers]);
 
-  const showLetter = useCallback(() => {
-    if (!alive.current) return;
-    setPhase("letter");
-  }, []);
-
   const requestOpen = () => {
     if (phase !== "idle") return;
     unlockAndPlay();
 
-    // Warm assets in the background — never hold the open sequence on them.
     if (!criticalReady) {
       void preloadCriticalAssets().then(() => {
         if (alive.current) setCriticalReady(true);
@@ -71,12 +61,13 @@ export function Envelope() {
     }
 
     if (reduceMotion) {
-      showLetter();
+      setPhase("letter");
       return;
     }
 
+    // Flap + expand start on the same frame — no parked pocket.
     setPhase("opening");
-    schedule(showLetter, EXPAND_AT_MS);
+    schedule(() => setPhase("letter"), FLAP_MS);
   };
 
   const close = () => {
@@ -86,23 +77,24 @@ export function Envelope() {
   };
 
   const idle = phase === "idle";
-  const opening = phase === "opening";
-  const expanded = phase === "letter";
-  const rising = opening || expanded;
+  const expanding = phase !== "idle";
+  const showFlap = phase === "opening";
 
   return (
     <div className="atmosphere relative min-h-dvh overflow-x-hidden">
-      <div
+      <motion.div
         className={
-          expanded
-            ? "relative"
+          expanding
+            ? "relative px-0"
             : "flex min-h-dvh items-center justify-center px-4 py-8 md:px-8"
         }
+        layout
+        transition={{ layout: { duration: 0.85, ease } }}
       >
         <motion.div
           layout
           className={
-            expanded
+            expanding
               ? "relative mx-auto w-full max-w-xl"
               : "relative w-full max-w-[22rem] sm:max-w-md"
           }
@@ -111,19 +103,18 @@ export function Envelope() {
           <motion.div
             layout
             className={
-              expanded
+              expanding
                 ? "relative w-full overflow-hidden bg-surface md:my-10 md:rounded-2xl md:shadow-[0_20px_60px_rgb(23_20_18/0.1)] md:ring-1 md:ring-black/5"
                 : "relative aspect-[3/4] w-full overflow-hidden rounded-[1.25rem] bg-[#ebe4db] shadow-[0_24px_60px_rgb(23_20_18/0.14)] ring-1 ring-black/5"
             }
             transition={{ layout: { duration: 0.85, ease } }}
-            style={expanded ? undefined : { perspective: 1400 }}
+            style={idle ? { perspective: 1400 } : undefined}
           >
-            {/* Closed face: pocket preview + seal */}
-            <AnimatePresence>
+            <AnimatePresence mode="popLayout">
               {idle ? (
                 <motion.div
-                  key="closed-face"
-                  className="absolute inset-0 z-10"
+                  key="closed"
+                  className="absolute inset-0 z-20"
                   initial={false}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.28, ease }}
@@ -135,7 +126,7 @@ export function Envelope() {
                     className="absolute inset-0 cursor-pointer touch-manipulation text-left"
                   >
                     <div className="absolute inset-[9%] flex flex-col justify-end rounded-md bg-surface px-5 pb-7 pt-6 sm:inset-[10%] sm:px-6 sm:pb-8">
-                      <div className="relative z-10 text-center">
+                      <div className="text-center">
                         <p className="font-script text-2xl leading-snug text-ink sm:text-3xl">
                           {wedding.namesJoined}
                         </p>
@@ -170,83 +161,61 @@ export function Envelope() {
                     </div>
                   </button>
                 </motion.div>
-              ) : null}
-            </AnimatePresence>
-
-            {/* Opening chrome: flap lifts while the letter is already rising underneath */}
-            <AnimatePresence>
-              {opening ? (
-                <motion.div
-                  key="opening-chrome"
-                  className="pointer-events-none absolute inset-0 z-20"
-                  initial={false}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.35, ease }}
-                >
-                  <div
-                    aria-hidden
-                    className="absolute inset-0 opacity-35"
-                    style={{
-                      background:
-                        "linear-gradient(to top right, transparent 46%, rgb(23 20 18 / 0.06) 50%, transparent 54%), linear-gradient(to top left, transparent 46%, rgb(23 20 18 / 0.06) 50%, transparent 54%)",
-                    }}
-                  />
-
-                  <motion.div
-                    className="absolute inset-x-0 top-0 origin-top"
-                    style={{
-                      height: "46%",
-                      clipPath: "polygon(0 0, 100% 0, 50% 100%)",
-                      background:
-                        "linear-gradient(180deg, #f4eee6 0%, #e5ddd2 100%)",
-                      boxShadow: "0 8px 20px rgb(23 20 18 / 0.08)",
-                      transformStyle: "preserve-3d",
-                      backfaceVisibility: "hidden",
-                    }}
-                    initial={{ rotateX: 0, y: 0, opacity: 1 }}
-                    animate={{ rotateX: -172, y: -22, opacity: 0 }}
-                    transition={{
-                      duration: FLAP_MS / 1000,
-                      ease,
-                      opacity: { duration: 0.4, delay: 0.28 },
-                    }}
-                  />
-
-                  <motion.div
-                    className="absolute left-1/2 top-[44%] -translate-x-1/2 -translate-y-1/2"
-                    initial={{ scale: 1, opacity: 1, y: 0 }}
-                    animate={{ scale: 0.7, opacity: 0, y: -44 }}
-                    transition={{ duration: 0.45, ease }}
-                  >
-                    <Monogram size={108} />
-                  </motion.div>
-                </motion.div>
-              ) : null}
-            </AnimatePresence>
-
-            {/* Letter: rises from the pocket immediately, then the shell expands around it */}
-            <AnimatePresence>
-              {rising ? (
+              ) : (
                 <motion.div
                   key="letter"
-                  className={
-                    expanded
-                      ? "relative z-10"
-                      : "absolute inset-[8%] z-10 overflow-hidden rounded-md bg-surface sm:inset-[9%]"
-                  }
+                  className="relative z-10"
                   initial={
                     reduceMotion
-                      ? { opacity: 1, y: 0 }
-                      : { opacity: 1, y: "62%" }
+                      ? { opacity: 1 }
+                      : { opacity: 0.35, y: 36, scale: 0.96 }
                   }
-                  animate={
-                    expanded
-                      ? { opacity: 1, y: 0 }
-                      : { opacity: 1, y: "10%" }
-                  }
-                  transition={{ duration: 0.75, ease }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.8, ease }}
                 >
                   <InvitationLetter onClose={close} embedded />
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Flap lifts off the expanding sheet (opening phase only) */}
+            <AnimatePresence>
+              {showFlap ? (
+                <motion.div
+                  key="flap"
+                  className="pointer-events-none absolute inset-x-0 top-0 z-40 origin-top"
+                  style={{
+                    height: "13.5rem",
+                    clipPath: "polygon(0 0, 100% 0, 50% 100%)",
+                    background:
+                      "linear-gradient(180deg, #f4eee6 0%, #e5ddd2 100%)",
+                    boxShadow: "0 10px 24px rgb(23 20 18 / 0.12)",
+                    transformStyle: "preserve-3d",
+                    backfaceVisibility: "hidden",
+                  }}
+                  initial={{ rotateX: 0, opacity: 1, y: 0 }}
+                  animate={{ rotateX: -170, opacity: 0, y: -12 }}
+                  exit={{ opacity: 0 }}
+                  transition={{
+                    duration: FLAP_MS / 1000,
+                    ease,
+                    opacity: { duration: 0.3, delay: 0.3 },
+                  }}
+                />
+              ) : null}
+            </AnimatePresence>
+
+            <AnimatePresence>
+              {showFlap ? (
+                <motion.div
+                  key="seal"
+                  className="pointer-events-none absolute left-1/2 top-[11.5rem] z-50 -translate-x-1/2 -translate-y-1/2"
+                  initial={{ scale: 1, opacity: 1, y: 0 }}
+                  animate={{ scale: 0.7, opacity: 0, y: -40 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.4, ease }}
+                >
+                  <Monogram size={108} />
                 </motion.div>
               ) : null}
             </AnimatePresence>
@@ -258,8 +227,8 @@ export function Envelope() {
                 key="cta"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.28 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.22 }}
                 className="font-ui mt-6 text-center text-xs tracking-[0.18em] text-ink-soft uppercase"
               >
                 {wedding.openCta}
@@ -267,7 +236,7 @@ export function Envelope() {
             ) : null}
           </AnimatePresence>
         </motion.div>
-      </div>
+      </motion.div>
     </div>
   );
 }
