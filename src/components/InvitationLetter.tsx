@@ -6,6 +6,7 @@ import { Countdown } from "@/components/Countdown";
 import { CouplePhoto } from "@/components/CouplePhoto";
 import { Families } from "@/components/Families";
 import { LocationCard } from "@/components/LocationCard";
+import { WaxSeal } from "@/components/WaxSeal";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
@@ -27,13 +28,9 @@ export function InvitationLetter() {
         style={{ clipPath: "polygon(0 0, 100% 0, 100% 55%, 50% 100%, 0 55%)" }}
       >
         <div className="gold-border-strip absolute inset-x-0 top-0 h-4 opacity-80" />
-        <img
-          src="/icons/wax-seal.svg"
-          alt=""
-          width={88}
-          height={88}
-          className="absolute left-1/2 top-[58%] h-20 w-20 -translate-x-1/2 -translate-y-1/2 drop-shadow-lg sm:h-22 sm:w-22"
-        />
+        <div className="absolute left-1/2 top-[58%] -translate-x-1/2 -translate-y-1/2 drop-shadow-lg">
+          <WaxSeal size={80} className="h-20 w-20" />
+        </div>
       </div>
 
       <div className="letter-surface relative -mt-6 pb-20 text-ink shadow-[0_-8px_40px_rgba(0,0,0,0.18)]">

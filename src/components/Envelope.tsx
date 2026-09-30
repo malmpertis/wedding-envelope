@@ -5,6 +5,7 @@ import { useState } from "react";
 import { wedding } from "@/content/wedding";
 import { useInvitationAudio } from "@/components/AudioControls";
 import { InvitationLetter } from "@/components/InvitationLetter";
+import { WaxSeal } from "@/components/WaxSeal";
 
 export function Envelope() {
   const reduceMotion = useReducedMotion();
@@ -14,7 +15,11 @@ export function Envelope() {
 
   const open = () => {
     if (opened) return;
-    unlockAndPlay();
+    try {
+      unlockAndPlay();
+    } catch {
+      // Audio unlock is best-effort; never block opening.
+    }
     if (reduceMotion) {
       setOpened(true);
       setShowLetter(true);
@@ -35,7 +40,9 @@ export function Envelope() {
             />
 
             <motion.div
-              className="relative h-dvh w-full overflow-hidden shadow-none md:h-auto md:aspect-[3/4.2] md:rounded-sm md:shadow-[0_30px_80px_rgba(0,0,0,0.45)]"
+              role="presentation"
+              onClick={open}
+              className="relative h-dvh w-full cursor-pointer overflow-hidden shadow-none md:h-auto md:aspect-[3/4.2] md:rounded-sm md:shadow-[0_30px_80px_rgba(0,0,0,0.45)]"
               style={{ perspective: 1200 }}
               initial={false}
               animate={
@@ -82,9 +89,16 @@ export function Envelope() {
               <motion.button
                 type="button"
                 onClick={open}
+                onPointerUp={open}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    open();
+                  }
+                }}
                 disabled={opened}
                 aria-label={wedding.openCta}
-                className="absolute left-1/2 top-[46%] z-40 flex min-h-28 min-w-28 -translate-x-1/2 -translate-y-1/2 touch-manipulation items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold disabled:cursor-default"
+                className="absolute left-1/2 top-[46%] z-50 flex min-h-32 min-w-32 -translate-x-1/2 -translate-y-1/2 touch-manipulation items-center justify-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold disabled:pointer-events-none disabled:cursor-default"
                 whileHover={opened ? undefined : { scale: 1.04 }}
                 whileTap={opened ? undefined : { scale: 0.97 }}
                 animate={
@@ -94,14 +108,7 @@ export function Envelope() {
                 }
                 transition={{ duration: 0.7 }}
               >
-                <img
-                  src="/icons/wax-seal.svg"
-                  alt=""
-                  width={128}
-                  height={128}
-                  className="h-28 w-28 drop-shadow-xl sm:h-32 sm:w-32"
-                  draggable={false}
-                />
+                <WaxSeal className="h-28 w-28 drop-shadow-xl sm:h-32 sm:w-32" size={128} />
               </motion.button>
 
               <div className="absolute inset-x-0 bottom-[max(1.25rem,env(safe-area-inset-bottom))] z-30 px-5 pb-2 text-center sm:bottom-6 sm:px-6">
