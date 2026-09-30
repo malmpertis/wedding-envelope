@@ -28,7 +28,6 @@ export function Countdown() {
   );
 
   useEffect(() => {
-    setRemaining(getRemaining(targetMs));
     const id = window.setInterval(() => {
       setRemaining(getRemaining(targetMs));
     }, 1000);
