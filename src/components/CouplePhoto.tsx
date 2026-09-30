@@ -62,7 +62,7 @@ export function CouplePhoto() {
       >
         <img
           ref={imgRef}
-          src="/couple.jpg"
+          src="/couple.png"
           alt={wedding.namesJoined}
           width={1080}
           height={1440}
