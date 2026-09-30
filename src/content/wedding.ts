@@ -40,8 +40,8 @@ export const wedding = {
   },
   ceremony: {
     title: "Το Μυστήριο",
-    subtitle: "Το μυστήριο του γάμου μας θα γίνει",
-    place: "Άγιος Νικόλαος",
+    subtitle: "Θα γίνει στον Ιερό Ναό",
+    place: "Αγίου Νικολάου",
     detail: "Πειραιάς",
     mapsUrl:
       "https://www.google.com/maps/search/?api=1&query=%CE%99%CE%B5%CF%81%CF%8C%CF%82+%CE%9D%CE%B1%CF%8C%CF%82+%CE%91%CE%B3%CE%AF%CE%BF%CF%85+%CE%9D%CE%B9%CE%BA%CE%BF%CE%BB%CE%AC%CE%BF%CF%85+%CE%A0%CE%B5%CE%B9%CF%81%CE%B1%CE%B9%CE%AC",
@@ -69,8 +69,8 @@ export const wedding = {
   reception: {
     title: "Η Δεξίωσή μας",
     subtitle:
-      "Μετά το μυστήριο, σας περιμένουμε να συνεχίσουμε τη γιορτή μας",
-    place: "Κτήμα Terra Verde",
+      "Μετά το μυστήριο, σας περιμένουμε να συνεχίσουμε τη γιορτή μας στο κτήμα",
+    place: "Terra Verde",
     detail: "Πάρκο Ηρώων, Ταύρος",
     mapsUrl:
       "https://www.google.com/maps/search/?api=1&query=%CE%9A%CF%84%CE%AE%CE%BC%CE%B1+Terra+Verde+%CE%A4%CE%B1%CF%8D%CF%81%CE%BF%CF%82",
