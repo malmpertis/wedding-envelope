@@ -402,10 +402,10 @@ function ClosedEnvelopeFace({
 
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 z-[15] opacity-40"
+        className="pointer-events-none absolute inset-0 z-[15] opacity-75"
         style={{
           background:
-            "linear-gradient(to top right, transparent 46%, rgb(23 20 18 / 0.06) 50%, transparent 54%), linear-gradient(to top left, transparent 46%, rgb(23 20 18 / 0.06) 50%, transparent 54%)",
+            "linear-gradient(to top right, transparent 46%, rgb(23 20 18 / 0.16) 50%, transparent 54%), linear-gradient(to top left, transparent 46%, rgb(23 20 18 / 0.16) 50%, transparent 54%)",
         }}
       />
 
