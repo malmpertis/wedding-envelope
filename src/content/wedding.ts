@@ -123,7 +123,7 @@ export const wedding = {
     creditLabel: "Μουσική: Romantic Day — Alex-Productions",
   },
   maker: {
-    line: "Created with ❤️ by Michael Almpertis",
+    line: "Created with ♥ by Michael Almpertis",
     instagramUrl: "https://www.instagram.com/michael_almpertis/",
     instagramLabel: "Instagram",
   },
