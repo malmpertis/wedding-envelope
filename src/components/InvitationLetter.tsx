@@ -66,8 +66,6 @@ export function InvitationLetter({ onClose }: InvitationLetterProps) {
           </section>
         </Reveal>
 
-        <div className="divider my-2" />
-
         <Reveal>
           <LocationCard
             title={wedding.ceremony.title}
