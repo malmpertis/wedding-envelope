@@ -65,11 +65,11 @@ export function CouplePhoto() {
           src="/couple.jpg"
           alt={wedding.namesJoined}
           width={1080}
-          height={1350}
+          height={1440}
           decoding="async"
           loading="eager"
           fetchPriority="high"
-          className="pointer-events-none absolute left-0 top-[-12%] h-[124%] w-full max-w-none object-cover object-[center_22%] will-change-transform"
+          className="pointer-events-none absolute left-0 top-[-12%] h-[124%] w-full max-w-none object-cover object-[center_40%] will-change-transform"
           style={{ transform: "translate3d(0, 0, 0) scale(1.22)" }}
         />
       </div>
