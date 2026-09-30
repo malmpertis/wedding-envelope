@@ -15,7 +15,7 @@ export function MapEmbed({
 }: MapEmbedProps) {
   return (
     <div
-      className={`map-frame relative w-full overflow-hidden bg-surface-soft ${className}`}
+      className={`map-frame relative w-full touch-none overflow-hidden bg-surface-soft pointer-events-none ${className}`}
     >
       <img
         src={imageSrc}
@@ -25,7 +25,7 @@ export function MapEmbed({
         decoding="async"
         loading="eager"
         draggable={false}
-        className="h-full w-full object-cover object-center select-none"
+        className="pointer-events-none h-full w-full select-none object-cover object-center"
       />
     </div>
   );
