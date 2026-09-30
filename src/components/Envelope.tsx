@@ -12,14 +12,14 @@ import {
 } from "@/lib/preload";
 
 const FLAP_MS = 640;
-/** Keep layout projection until the sheet has finished growing */
 const EXPAND_MS = 1000;
+const CLOSE_MS = 1000;
 const ease = [0.22, 1, 0.36, 1] as const;
 
 const ENVELOPE_BG = "#ebe4db";
 const LETTER_BG = "#fffcf8";
 
-type Phase = "idle" | "opening" | "open";
+type Phase = "idle" | "opening" | "open" | "closing";
 
 export function Envelope() {
   const reduceMotion = useReducedMotion();
@@ -71,27 +71,45 @@ export function Envelope() {
     }
 
     setPhase("opening");
-    // Drop layout transforms only after expand finishes so scroll reveals work again
     schedule(() => setPhase("open"), EXPAND_MS);
   };
 
   const close = () => {
+    if (phase !== "open" && phase !== "opening") return;
     clearTimers();
-    setPhase("idle");
+
+    // Start the reverse morph from the top of the letter
     window.scrollTo({ top: 0 });
+
+    if (reduceMotion) {
+      setPhase("idle");
+      return;
+    }
+
+    // Let scroll apply before Framer measures layout
+    requestAnimationFrame(() => {
+      if (!alive.current) return;
+      setPhase("closing");
+      schedule(() => setPhase("idle"), CLOSE_MS);
+    });
   };
 
   const idle = phase === "idle";
-  const isOpen = phase !== "idle";
-  const showFlap = phase === "opening";
-  // Layout projection only while morphing — it breaks whileInView if left on
+  const closing = phase === "closing";
+  const sheetExpanded = phase === "opening" || phase === "open";
+  const showLetter =
+    phase === "opening" || phase === "open" || phase === "closing";
+  const showClosedFace = idle || closing;
+  const showOpeningFlap = phase === "opening";
+  const showClosingFlap = closing;
+  // Layout on while morphing or idle (idle keeps prior bounds for the next open)
   const layoutActive = phase !== "open";
 
   return (
     <div className="atmosphere relative min-h-dvh overflow-x-hidden">
       <div
         className={
-          isOpen
+          sheetExpanded
             ? "relative"
             : "flex min-h-dvh items-center justify-center px-4 py-8 md:px-8"
         }
@@ -99,45 +117,65 @@ export function Envelope() {
         <motion.div
           layout={layoutActive}
           className={
-            isOpen
+            sheetExpanded
               ? "relative mx-auto w-full max-w-xl"
               : "relative w-full max-w-[22rem] sm:max-w-md"
           }
-          transition={{ layout: { duration: EXPAND_MS / 1000, ease } }}
+          transition={{
+            layout: {
+              duration: (sheetExpanded ? EXPAND_MS : CLOSE_MS) / 1000,
+              ease,
+            },
+          }}
         >
           <motion.div
             layout={layoutActive}
             className={
-              isOpen
+              sheetExpanded
                 ? `relative w-full md:my-10 md:rounded-2xl md:shadow-[0_20px_60px_rgb(23_20_18/0.1)] md:ring-1 md:ring-black/5 ${
-                    phase === "opening" ? "overflow-hidden" : "overflow-x-clip"
+                    phase === "opening" || closing
+                      ? "overflow-hidden"
+                      : "overflow-x-clip"
                   }`
                 : "relative aspect-[3/4] w-full overflow-hidden rounded-[1.25rem] shadow-[0_24px_60px_rgb(23_20_18/0.14)] ring-1 ring-black/5"
             }
             initial={false}
             animate={{
-              backgroundColor: isOpen ? LETTER_BG : ENVELOPE_BG,
+              backgroundColor: sheetExpanded ? LETTER_BG : ENVELOPE_BG,
             }}
             transition={{
-              layout: { duration: EXPAND_MS / 1000, ease },
+              layout: {
+                duration: (sheetExpanded ? EXPAND_MS : CLOSE_MS) / 1000,
+                ease,
+              },
               backgroundColor: { duration: 0.7, ease },
             }}
-            style={idle ? { perspective: 1400 } : undefined}
+            style={
+              idle || closing || showOpeningFlap
+                ? { perspective: 1400 }
+                : undefined
+            }
           >
             <AnimatePresence>
-              {idle ? (
+              {showClosedFace ? (
                 <motion.div
                   key="closed"
                   className="absolute inset-0 z-20"
-                  initial={false}
+                  initial={closing ? { opacity: 0 } : false}
+                  animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 0.28, ease }}
+                  transition={{
+                    duration: closing ? 0.45 : 0.28,
+                    delay: closing ? 0.35 : 0,
+                    ease,
+                  }}
                 >
                   <button
                     type="button"
                     onClick={requestOpen}
+                    disabled={!idle}
                     aria-label={wedding.openCta}
-                    className="absolute inset-0 cursor-pointer touch-manipulation text-left"
+                    className="absolute inset-0 touch-manipulation text-left enabled:cursor-pointer disabled:cursor-default"
                   >
                     <div className="absolute inset-[9%] flex flex-col justify-end rounded-md bg-surface px-5 pb-7 pt-6 sm:inset-[10%] sm:px-6 sm:pb-8">
                       <div className="text-center">
@@ -159,32 +197,41 @@ export function Envelope() {
                       }}
                     />
 
-                    <div
-                      className="absolute inset-x-0 top-0 z-20 origin-top"
-                      style={{
-                        height: "46%",
-                        clipPath: "polygon(0 0, 100% 0, 50% 100%)",
-                        background:
-                          "linear-gradient(180deg, #f4eee6 0%, #e5ddd2 100%)",
-                        boxShadow: "0 8px 20px rgb(23 20 18 / 0.08)",
-                      }}
-                    />
+                    {/* Static flap while idle; animated flap handles close/open */}
+                    {idle ? (
+                      <div
+                        className="absolute inset-x-0 top-0 z-20 origin-top"
+                        style={{
+                          height: "46%",
+                          clipPath: "polygon(0 0, 100% 0, 50% 100%)",
+                          background:
+                            "linear-gradient(180deg, #f4eee6 0%, #e5ddd2 100%)",
+                          boxShadow: "0 8px 20px rgb(23 20 18 / 0.08)",
+                        }}
+                      />
+                    ) : null}
 
-                    <div className="absolute left-1/2 top-[44%] z-30 -translate-x-1/2 -translate-y-1/2">
-                      <Monogram size={108} />
-                    </div>
+                    {idle ? (
+                      <div className="absolute left-1/2 top-[44%] z-30 -translate-x-1/2 -translate-y-1/2">
+                        <Monogram size={108} />
+                      </div>
+                    ) : null}
                   </button>
                 </motion.div>
               ) : null}
             </AnimatePresence>
 
             <AnimatePresence>
-              {isOpen ? (
+              {showLetter ? (
                 <motion.div
                   key="letter"
                   initial={reduceMotion ? { opacity: 1 } : { opacity: 0.55 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.45, ease }}
+                  animate={{ opacity: closing ? 0 : 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{
+                    duration: closing ? 0.4 : 0.45,
+                    ease,
+                  }}
                 >
                   <InvitationLetter
                     onClose={close}
@@ -196,10 +243,11 @@ export function Envelope() {
               ) : null}
             </AnimatePresence>
 
+            {/* Open: flap lifts away */}
             <AnimatePresence>
-              {showFlap ? (
+              {showOpeningFlap ? (
                 <motion.div
-                  key="flap"
+                  key="flap-open"
                   className="pointer-events-none absolute inset-x-0 top-0 z-40 origin-top"
                   style={{
                     height: "13rem",
@@ -223,9 +271,9 @@ export function Envelope() {
             </AnimatePresence>
 
             <AnimatePresence>
-              {showFlap ? (
+              {showOpeningFlap ? (
                 <motion.div
-                  key="seal"
+                  key="seal-open"
                   className="pointer-events-none absolute left-1/2 top-[11.25rem] z-50 -translate-x-1/2 -translate-y-1/2"
                   initial={{ scale: 1, opacity: 1, y: 0 }}
                   animate={{ scale: 0.72, opacity: 0, y: -36 }}
@@ -233,6 +281,49 @@ export function Envelope() {
                   transition={{ duration: 0.38, ease }}
                 >
                   <Monogram size={96} />
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
+
+            {/* Close: flap folds back down over the shrinking sheet */}
+            <AnimatePresence>
+              {showClosingFlap ? (
+                <motion.div
+                  key="flap-close"
+                  className="pointer-events-none absolute inset-x-0 top-0 z-40 origin-top"
+                  style={{
+                    height: "46%",
+                    clipPath: "polygon(0 0, 100% 0, 50% 100%)",
+                    background:
+                      "linear-gradient(180deg, #f4eee6 0%, #e5ddd2 100%)",
+                    boxShadow: "0 10px 24px rgb(23 20 18 / 0.1)",
+                    transformStyle: "preserve-3d",
+                    backfaceVisibility: "hidden",
+                  }}
+                  initial={{ rotateX: -170, opacity: 0 }}
+                  animate={{ rotateX: 0, opacity: 1 }}
+                  exit={{ opacity: 1 }}
+                  transition={{
+                    duration: FLAP_MS / 1000,
+                    delay: 0.2,
+                    ease,
+                    opacity: { duration: 0.35, delay: 0.2 },
+                  }}
+                />
+              ) : null}
+            </AnimatePresence>
+
+            <AnimatePresence>
+              {showClosingFlap ? (
+                <motion.div
+                  key="seal-close"
+                  className="pointer-events-none absolute left-1/2 top-[44%] z-50 -translate-x-1/2 -translate-y-1/2"
+                  initial={{ scale: 0.72, opacity: 0, y: -36 }}
+                  animate={{ scale: 1, opacity: 1, y: 0 }}
+                  exit={{ opacity: 1 }}
+                  transition={{ duration: 0.45, delay: 0.4, ease }}
+                >
+                  <Monogram size={108} />
                 </motion.div>
               ) : null}
             </AnimatePresence>
@@ -245,7 +336,7 @@ export function Envelope() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.25, delay: 0.05 }}
                 className="font-ui mt-6 text-center text-xs tracking-[0.18em] text-ink-soft uppercase"
               >
                 {wedding.openCta}
