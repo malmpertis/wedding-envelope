@@ -1,6 +1,7 @@
 /** Critical assets warmed during the envelope intro */
 export const PRELOAD_ASSETS = [
   "/couple.jpg",
+  "/welcome-script.png",
   "/icons/rings.svg",
   "/icons/church.svg",
   "/icons/venue.svg",
