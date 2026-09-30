@@ -27,28 +27,26 @@ export function Envelope() {
   return (
     <div className="relative min-h-dvh overflow-x-hidden bg-forest-deep">
       {!showLetter ? (
-        <div className="relative flex min-h-dvh items-center justify-center px-4 py-10">
-          <div className="relative w-full max-w-md">
-            {/* Atmospheric glow */}
+        <div className="relative flex min-h-dvh items-stretch justify-center md:items-center md:px-6 md:py-10">
+          <div className="relative w-full max-w-none md:max-w-md">
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-0 -z-10 scale-125 bg-[radial-gradient(ellipse_at_center,rgba(197,163,90,0.12),transparent_60%)]"
+              className="pointer-events-none absolute inset-0 -z-10 hidden scale-125 bg-[radial-gradient(ellipse_at_center,rgba(197,163,90,0.14),transparent_60%)] md:block"
             />
 
             <motion.div
-              className="relative aspect-[3/4.2] w-full overflow-hidden rounded-sm shadow-[0_30px_80px_rgba(0,0,0,0.45)]"
+              className="relative h-dvh w-full overflow-hidden shadow-none md:h-auto md:aspect-[3/4.2] md:rounded-sm md:shadow-[0_30px_80px_rgba(0,0,0,0.45)]"
               style={{ perspective: 1200 }}
               initial={false}
-              animate={opened ? { scale: 0.98, opacity: 0.35 } : { scale: 1, opacity: 1 }}
+              animate={
+                opened ? { scale: 0.98, opacity: 0.35 } : { scale: 1, opacity: 1 }
+              }
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
-              {/* Envelope body */}
               <div className="absolute inset-0 bg-gradient-to-b from-forest-mid via-forest to-forest-deep" />
 
-              {/* Paper hint behind flap */}
-              <div className="absolute inset-x-[8%] top-[28%] bottom-[10%] bg-cream/90" />
+              <div className="absolute inset-x-[6%] top-[26%] bottom-[8%] bg-cream/90 sm:inset-x-[8%] sm:top-[28%] sm:bottom-[10%]" />
 
-              {/* Top flap */}
               <motion.div
                 className="absolute inset-x-0 top-0 z-20 origin-top"
                 style={{
@@ -66,7 +64,6 @@ export function Envelope() {
                 transition={{ duration: 1.05, ease: [0.22, 1, 0.36, 1] }}
               />
 
-              {/* Side fold lines */}
               <div
                 aria-hidden
                 className="absolute inset-0 z-10"
@@ -79,17 +76,15 @@ export function Envelope() {
                 }}
               />
 
-              {/* Gold borders */}
-              <div className="gold-border-strip absolute inset-x-0 top-0 z-30 h-5 opacity-90" />
-              <div className="gold-border-strip absolute inset-x-0 bottom-0 z-30 h-5 opacity-90" />
+              <div className="gold-border-strip absolute inset-x-0 top-0 z-30 h-4 opacity-90 sm:h-5" />
+              <div className="gold-border-strip absolute inset-x-0 bottom-0 z-30 h-4 opacity-90 sm:h-5" />
 
-              {/* Wax seal button */}
               <motion.button
                 type="button"
                 onClick={open}
                 disabled={opened}
                 aria-label={wedding.openCta}
-                className="absolute left-1/2 top-[46%] z-40 -translate-x-1/2 -translate-y-1/2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold disabled:cursor-default"
+                className="absolute left-1/2 top-[46%] z-40 flex min-h-28 min-w-28 -translate-x-1/2 -translate-y-1/2 touch-manipulation items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold disabled:cursor-default"
                 whileHover={opened ? undefined : { scale: 1.04 }}
                 whileTap={opened ? undefined : { scale: 0.97 }}
                 animate={
@@ -109,17 +104,21 @@ export function Envelope() {
                 />
               </motion.button>
 
-              <p className="absolute inset-x-0 bottom-12 z-30 px-6 text-center font-script text-xl text-gold-light/90 sm:text-2xl">
-                {wedding.namesJoined}
-              </p>
-              <p className="absolute inset-x-0 bottom-6 z-30 px-6 text-center text-[0.7rem] tracking-[0.2em] text-cream/70 uppercase">
-                {wedding.openCta}
-              </p>
+              <div className="absolute inset-x-0 bottom-[max(1.25rem,env(safe-area-inset-bottom))] z-30 px-5 pb-2 text-center sm:bottom-6 sm:px-6">
+                <p className="font-script text-[1.35rem] leading-snug text-gold-light/90 sm:text-2xl">
+                  {wedding.namesJoined}
+                </p>
+                <p className="mt-2 text-[0.65rem] tracking-[0.16em] text-cream/70 uppercase sm:text-[0.7rem] sm:tracking-[0.2em]">
+                  {wedding.openCta}
+                </p>
+              </div>
             </motion.div>
           </div>
         </div>
       ) : (
-        <InvitationLetter />
+        <div className="md:bg-[radial-gradient(ellipse_at_top,rgba(35,74,58,0.55),transparent_55%)]">
+          <InvitationLetter />
+        </div>
       )}
     </div>
   );

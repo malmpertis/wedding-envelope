@@ -88,7 +88,7 @@ export function MuteButton() {
       type="button"
       onClick={toggleMute}
       aria-label={muted ? "Ενεργοποίηση ήχου" : "Σίγαση ήχου"}
-      className="fixed bottom-5 right-5 z-50 flex h-11 w-11 items-center justify-center rounded-full bg-forest-deep/55 text-cream shadow-lg backdrop-blur-sm transition hover:bg-forest-deep/75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+      className="fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-[max(1.25rem,env(safe-area-inset-right))] z-50 flex h-12 w-12 touch-manipulation items-center justify-center rounded-full bg-forest-deep/55 text-cream shadow-lg backdrop-blur-sm transition hover:bg-forest-deep/75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold sm:h-11 sm:w-11"
     >
       {muted ? (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>

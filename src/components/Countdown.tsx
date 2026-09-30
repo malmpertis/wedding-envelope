@@ -43,13 +43,13 @@ export function Countdown() {
   ];
 
   return (
-    <div className="grid grid-cols-4 gap-2 sm:gap-4" aria-live="polite">
+    <div className="grid grid-cols-4 gap-1.5 xs:gap-2 sm:gap-4" aria-live="polite">
       {items.map((item) => (
-        <div key={item.label} className="text-center">
-          <div className="font-serif text-3xl font-semibold tracking-tight text-ink sm:text-4xl md:text-5xl">
+        <div key={item.label} className="min-w-0 text-center">
+          <div className="font-serif text-[1.65rem] font-semibold tracking-tight text-ink sm:text-4xl md:text-5xl">
             {String(item.value).padStart(2, "0")}
           </div>
-          <div className="mt-1 text-[0.65rem] font-medium tracking-[0.18em] text-ink-soft sm:text-xs">
+          <div className="mt-1 text-[0.55rem] font-medium tracking-[0.12em] text-ink-soft sm:text-xs sm:tracking-[0.18em]">
             {item.label}
           </div>
         </div>

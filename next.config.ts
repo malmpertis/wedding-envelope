@@ -6,8 +6,6 @@ const nextConfig: NextConfig = {
     unoptimized: true,
   },
   trailingSlash: true,
-  // @ts-expect-error agentRules is supported by create-next-app tooling
-  agentRules: false,
-}
+};
 
 export default nextConfig;

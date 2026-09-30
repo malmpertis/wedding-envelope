@@ -2,7 +2,7 @@ import { wedding } from "@/content/wedding";
 
 export function Families() {
   return (
-    <section className="px-6 py-12 sm:px-10 sm:py-16">
+    <section className="px-4 py-12 sm:px-10 sm:py-16">
       <div className="mx-auto max-w-lg text-center">
         <img
           src="/icons/rings.svg"

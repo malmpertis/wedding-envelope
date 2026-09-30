@@ -20,14 +20,22 @@ export function LocationCard({
   iconAlt,
 }: LocationCardProps) {
   return (
-    <section className="px-6 py-12 sm:px-10 sm:py-14">
+    <section className="px-4 py-12 sm:px-10 sm:py-14">
       <div className="mx-auto flex max-w-lg flex-col items-center text-center">
-        <img src={iconSrc} alt={iconAlt} width={56} height={56} className="mb-5 text-ink opacity-80" />
-        <h2 className="font-serif text-3xl font-semibold tracking-wide text-ink sm:text-4xl">
+        <img
+          src={iconSrc}
+          alt={iconAlt}
+          width={56}
+          height={56}
+          className="mb-5 text-ink opacity-80"
+        />
+        <h2 className="font-serif text-[1.85rem] font-semibold tracking-wide text-ink sm:text-4xl">
           {title}
         </h2>
         {subtitle ? (
-          <p className="mt-3 max-w-sm text-base text-ink-soft sm:text-lg">{subtitle}</p>
+          <p className="mt-3 max-w-sm text-base leading-relaxed text-ink-soft sm:text-lg">
+            {subtitle}
+          </p>
         ) : null}
         <p className="mt-5 font-serif text-xl text-ink sm:text-2xl">{place}</p>
         <p className="mt-1 text-sm tracking-wide text-ink-soft sm:text-base">{detail}</p>
@@ -36,7 +44,7 @@ export function LocationCard({
           <iframe
             title={place}
             src={embedUrl}
-            className="h-56 w-full border-0 sm:h-64"
+            className="h-52 w-full border-0 sm:h-64"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
             allowFullScreen
@@ -47,7 +55,7 @@ export function LocationCard({
           href={mapsUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-6 inline-flex items-center gap-2 border-b border-gold pb-0.5 text-sm tracking-[0.16em] text-forest uppercase transition hover:text-gold-dark"
+          className="mt-6 inline-flex min-h-11 touch-manipulation items-center gap-2 border-b border-gold pb-0.5 text-sm tracking-[0.16em] text-forest uppercase transition hover:text-gold-dark"
         >
           Οδηγίες
         </a>
