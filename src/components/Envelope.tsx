@@ -190,10 +190,10 @@ export function Envelope() {
               layout={layoutActive}
               className={
                 sheetExpanded
-                  ? `relative w-full bg-surface md:my-10 md:rounded-2xl md:shadow-[0_20px_60px_rgb(23_20_18/0.1)] md:ring-1 md:ring-black/5 ${
+                  ? `relative w-full ${
                       phase === "opening"
-                        ? "overflow-hidden"
-                        : "overflow-x-clip"
+                        ? "overflow-hidden bg-surface shadow-[0_20px_60px_rgb(23_20_18/0.08)]"
+                        : "overflow-x-clip bg-transparent"
                     }`
                   : "relative aspect-[3/4] w-full overflow-hidden rounded-[1.25rem] bg-surface shadow-[0_24px_60px_rgb(23_20_18/0.14)] ring-1 ring-black/5"
               }
@@ -319,6 +319,7 @@ export function Envelope() {
                 position: "fixed",
                 zIndex: 60,
                 perspective: 1400,
+                // Match the closed envelope card while shrinking back
                 backgroundColor: LETTER_BG,
               }}
             >
@@ -339,8 +340,7 @@ export function Envelope() {
                 style={{
                   height: "46%",
                   clipPath: "polygon(0 0, 100% 0, 50% 100%)",
-                  background:
-                    "linear-gradient(180deg, #f4eee6 0%, #e5ddd2 100%)",
+                  background: `linear-gradient(180deg, #f4eee6 0%, ${ENVELOPE_BG} 100%)`,
                   boxShadow: "0 10px 24px rgb(23 20 18 / 0.1)",
                   transformStyle: "preserve-3d",
                   backfaceVisibility: "hidden",
