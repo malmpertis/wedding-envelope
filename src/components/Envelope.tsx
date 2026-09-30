@@ -195,20 +195,20 @@ export function Envelope() {
               layout={layoutActive}
               className={
                 sheetExpanded
-                  ? `relative w-full overflow-x-clip bg-surface md:my-10 md:rounded-2xl md:ring-1 md:ring-black/5 ${
-                      phase === "opening" ? "overflow-hidden" : ""
-                    }`
-                  : "relative aspect-[3/4] w-full overflow-hidden rounded-[1.25rem] bg-surface ring-1 ring-black/5"
+                  ? "relative w-full overflow-hidden bg-surface md:my-10 md:ring-1 md:ring-black/5"
+                  : "relative aspect-[3/4] w-full overflow-hidden bg-surface ring-1 ring-black/5"
               }
               initial={false}
               animate={{
                 // Drop blur quickly on open so the expanding sheet doesn’t cast a
                 // growing radial “beige to white” wash behind the letter.
                 boxShadow: sheetExpanded ? SHADOW_LETTER : SHADOW_ENVELOPE,
+                borderRadius: sheetExpanded ? 16 : 20,
               }}
               transition={{
                 layout: { duration: EXPAND_MS / 1000, ease },
                 boxShadow: { duration: 0.4, ease },
+                borderRadius: { duration: EXPAND_MS / 1000, ease },
               }}
               style={idle || showOpeningFlap ? { perspective: 1400 } : undefined}
             >
