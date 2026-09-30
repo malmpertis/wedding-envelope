@@ -140,10 +140,8 @@ body {
 }
 
 .atmosphere {
-  background:
-    radial-gradient(ellipse 80% 50% at 50% 0%, rgb(255 252 248 / 0.9), transparent 70%),
-    radial-gradient(ellipse 60% 40% at 80% 100%, rgb(196 178 163 / 0.25), transparent 60%),
-    linear-gradient(165deg, var(--bg) 0%, var(--bg-deep) 100%);
+  /* Flat page wash — avoid a bright radial that vanishes when the letter expands */
+  background: linear-gradient(165deg, var(--bg) 0%, var(--bg-deep) 100%);
 }
 
 @media (prefers-reduced-motion: reduce) {
