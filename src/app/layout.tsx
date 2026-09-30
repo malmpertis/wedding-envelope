@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { asset } from "@/lib/paths";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -42,12 +43,12 @@ export default function RootLayout({
         <link
           rel="preload"
           as="image"
-          href="/couple.webp"
+          href={asset("/couple.webp")}
           type="image/webp"
         />
-        <link rel="preload" as="image" href="/couple.jpg" />
-        <link rel="preload" as="image" href="/welcome-script.png" />
-        <link rel="preload" as="image" href="/maps/ceremony.jpg" />
+        <link rel="preload" as="image" href={asset("/couple.jpg")} />
+        <link rel="preload" as="image" href={asset("/welcome-script.png")} />
+        <link rel="preload" as="image" href={asset("/maps/ceremony.jpg")} />
       </head>
       <body className="min-h-full font-display">{children}</body>
     </html>

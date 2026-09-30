@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { wedding } from "@/content/wedding";
+import { asset } from "@/lib/paths";
 
 /**
  * Portrait with classic scroll parallax: the photo drifts slower than
@@ -63,10 +64,10 @@ export function CouplePhoto() {
         className="relative aspect-[4/5] w-full overflow-hidden bg-surface-soft sm:aspect-[5/4]"
       >
         <picture>
-          <source srcSet="/couple.webp" type="image/webp" />
+          <source srcSet={asset("/couple.webp")} type="image/webp" />
           <img
             ref={imgRef}
-            src="/couple.jpg"
+            src={asset("/couple.jpg")}
             alt={wedding.namesJoined}
             width={1086}
             height={1448}
@@ -80,7 +81,7 @@ export function CouplePhoto() {
       </div>
       <figcaption className="flex justify-center px-6 py-6 sm:px-10 sm:py-8">
         <img
-          src="/welcome-script.png"
+          src={asset("/welcome-script.png")}
           alt="Welcome to our love story"
           width={777}
           height={223}

@@ -33,8 +33,9 @@ jobs:
       - name: Build static export
         env:
           # Project site: https://malmpertis.github.io/wedding-envelope/
-          # For a custom apex domain later, remove this env (or set GITHUB_PAGES=false).
+          # For a custom apex domain later, remove these (or set GITHUB_PAGES=false).
           GITHUB_PAGES: "true"
+          NEXT_PUBLIC_BASE_PATH: "/wedding-envelope"
         run: npm run build
 
       - name: Upload Pages artifact

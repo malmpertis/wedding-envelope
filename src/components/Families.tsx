@@ -1,4 +1,5 @@
 import { wedding } from "@/content/wedding";
+import { asset } from "@/lib/paths";
 
 export function Families() {
   return (
@@ -6,7 +7,7 @@ export function Families() {
       <section className="px-5 py-12 sm:px-10 sm:py-16">
         <div className="mx-auto max-w-lg text-center">
           <img
-            src="/icons/rings.svg"
+            src={asset("/icons/rings.svg")}
             alt=""
             width={64}
             height={40}

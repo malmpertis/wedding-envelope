@@ -1,5 +1,7 @@
 "use client";
 
+import { asset } from "@/lib/paths";
+
 type MapEmbedProps = {
   title: string;
   /** Static map image in /public/maps */
@@ -18,7 +20,7 @@ export function MapEmbed({
       className={`map-frame relative w-full touch-none overflow-hidden bg-surface-soft pointer-events-none ${className}`}
     >
       <img
-        src={imageSrc}
+        src={asset(imageSrc)}
         alt={`Χάρτης: ${title}`}
         width={1125}
         height={600}

@@ -1,6 +1,7 @@
 import { MapButton } from "@/components/MapButton";
 import { MapEmbed } from "@/components/MapEmbed";
 import { wedding } from "@/content/wedding";
+import { asset } from "@/lib/paths";
 
 type LocationCardProps = {
   title: string;
@@ -25,7 +26,7 @@ export function LocationCard({
     <section className="px-5 py-12 sm:px-10 sm:py-14">
       <div className="mx-auto flex max-w-lg flex-col items-center text-center">
         <img
-          src={iconSrc}
+          src={asset(iconSrc)}
           alt=""
           width={56}
           height={56}

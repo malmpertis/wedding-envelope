@@ -4,6 +4,7 @@ import type { NextConfig } from "next";
 const repoBase = "wedding-envelope";
 const usePagesBase =
   process.env.GITHUB_PAGES === "true" || process.env.GITHUB_PAGES === "1";
+const basePath = usePagesBase ? `/${repoBase}` : "";
 
 const nextConfig: NextConfig = {
   output: "export",
@@ -11,9 +12,11 @@ const nextConfig: NextConfig = {
     unoptimized: true,
   },
   trailingSlash: true,
-  ...(usePagesBase
-    ? { basePath: `/${repoBase}`, assetPrefix: `/${repoBase}/` }
-    : {}),
+  env: {
+    // Inlined into client bundles for asset("/…") helpers
+    NEXT_PUBLIC_BASE_PATH: basePath,
+  },
+  ...(usePagesBase ? { basePath, assetPrefix: `${basePath}/` } : {}),
 };
 
 export default nextConfig;

@@ -1,18 +1,20 @@
+import { asset } from "@/lib/paths";
+
 /** Assets to warm while the envelope is closed */
 export const CRITICAL_IMAGES = [
-  "/couple.webp",
-  "/couple.jpg",
-  "/welcome-script.png",
+  asset("/couple.webp"),
+  asset("/couple.jpg"),
+  asset("/welcome-script.png"),
 ] as const;
 
 export const SECONDARY_ASSETS = [
-  "/icons/rings.svg",
-  "/icons/church.svg",
-  "/icons/venue.svg",
-  "/maps/ceremony.jpg",
-  "/maps/reception.jpg",
-  "/maps/prep-groom.jpg",
-  "/maps/prep-bride.jpg",
+  asset("/icons/rings.svg"),
+  asset("/icons/church.svg"),
+  asset("/icons/venue.svg"),
+  asset("/maps/ceremony.jpg"),
+  asset("/maps/reception.jpg"),
+  asset("/maps/prep-groom.jpg"),
+  asset("/maps/prep-bride.jpg"),
 ] as const;
 
 function loadImage(src: string): Promise<void> {
