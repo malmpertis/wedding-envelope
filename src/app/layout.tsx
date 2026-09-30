@@ -32,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="el" className="h-full antialiased">
+    <html lang="el" className="h-full antialiased" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -54,7 +54,10 @@ export default function RootLayout({
         <link rel="preload" as="image" href={asset("/welcome-script.png")} />
         <link rel="preload" as="image" href={asset("/maps/ceremony.jpg")} />
       </head>
-      <body className="min-h-full font-display">{children}</body>
+      {/* Extensions (e.g. ColorZilla) inject attributes like cz-shortcut-listen */}
+      <body className="min-h-full font-display" suppressHydrationWarning>
+        {children}
+      </body>
     </html>
   );
 }
