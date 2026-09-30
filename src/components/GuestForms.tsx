@@ -12,6 +12,9 @@ function openMailto(subject: string, body: string) {
 const fieldClass =
   "font-ui mt-2 w-full border border-[var(--line)] bg-white px-3 py-3 text-base text-ink outline-none transition focus:border-accent";
 
+const submitButtonClass =
+  "font-ui flex min-h-12 w-full touch-manipulation items-center justify-center border border-ink bg-transparent px-4 text-sm tracking-[0.14em] text-ink uppercase transition hover:bg-ink hover:text-surface";
+
 export function RsvpForm() {
   const [status, setStatus] = useState<"idle" | "ready">("idle");
 
@@ -120,10 +123,7 @@ export function RsvpForm() {
           Θέλετε να γνωρίζουμε κάτι:
           <textarea name="notes" rows={3} className={fieldClass} />
         </label>
-        <button
-          type="submit"
-          className="font-ui flex min-h-12 w-full touch-manipulation items-center justify-center bg-ink px-4 text-sm tracking-[0.14em] text-surface uppercase transition hover:bg-accent"
-        >
+        <button type="submit" className={submitButtonClass}>
           {wedding.rsvp.submit}
         </button>
         {status === "ready" ? (
@@ -173,10 +173,7 @@ export function WishesForm() {
           Ευχή
           <textarea name="wish" required rows={4} className={fieldClass} />
         </label>
-        <button
-          type="submit"
-          className="font-ui flex min-h-12 w-full touch-manipulation items-center justify-center border border-ink bg-transparent px-4 text-sm tracking-[0.14em] text-ink uppercase transition hover:bg-ink hover:text-surface"
-        >
+        <button type="submit" className={submitButtonClass}>
           {wedding.wishes.submit}
         </button>
         {status === "ready" ? (

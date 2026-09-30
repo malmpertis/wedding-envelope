@@ -28,11 +28,11 @@ TILE = (
 WIDTH, HEIGHT = 1125, 600
 
 LOCATIONS = [
-    # name, lat, lon, zoom
-    ("ceremony", 37.9386708, 23.6402461, 18),
-    ("prep-bride", 37.9527040, 23.6571597, 18),
-    ("prep-groom", 37.9557770, 23.6624515, 18),
-    ("reception", 37.9733947, 23.7007129, 17),
+    # name, lat, lon, zoom (street-level; reception one step wider for park context)
+    ("ceremony", 37.9386708, 23.6402461, 19),
+    ("prep-bride", 37.9527040, 23.6571597, 19),
+    ("prep-groom", 37.9557770, 23.6624515, 19),
+    ("reception", 37.9733947, 23.7007129, 18),
 ]
 
 
