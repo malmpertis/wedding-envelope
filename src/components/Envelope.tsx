@@ -309,13 +309,14 @@ export function Envelope() {
           {closing && closeFrom && closeTo ? (
             <motion.div
               key="close-fly"
-              className="overflow-hidden shadow-[0_24px_60px_rgb(23_20_18/0.16)] ring-1 ring-black/5"
+              className="overflow-hidden ring-1 ring-black/5"
               initial={{
                 top: closeFrom.top,
                 left: closeFrom.left,
                 width: closeFrom.width,
                 height: closeFrom.height,
                 borderRadius: closeFrom.width >= 560 ? 16 : 0,
+                boxShadow: "0 0 0 rgb(23 20 18 / 0)",
               }}
               animate={{
                 top: closeTo.top,
@@ -323,13 +324,13 @@ export function Envelope() {
                 width: closeTo.width,
                 height: closeTo.height,
                 borderRadius: 20,
+                boxShadow: "0 24px 60px rgb(23 20 18 / 0.14)",
               }}
               transition={{ duration: CLOSE_MS / 1000, ease }}
               style={{
                 position: "fixed",
                 zIndex: 60,
                 perspective: 1400,
-                // Match the closed envelope card while shrinking back
                 backgroundColor: LETTER_BG,
               }}
             >
