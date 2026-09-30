@@ -31,8 +31,9 @@ export function CouplePhoto() {
       const frameCenter = rect.top + rect.height / 2;
       const viewCenter = viewH / 2;
       const delta = frameCenter - viewCenter;
-      const shift = delta * -0.28;
-      img.style.transform = `translate3d(0, ${shift}px, 0) scale(1.22)`;
+      // Bias upward (negative Y) so faces stay in frame; gentle drift only
+      const shift = Math.min(8, Math.max(-72, -40 + delta * 0.16));
+      img.style.transform = `translate3d(0, ${shift}px, 0) scale(1.2)`;
     };
 
     const onScrollOrResize = () => {
@@ -72,8 +73,8 @@ export function CouplePhoto() {
             decoding="async"
             loading="eager"
             fetchPriority="high"
-            className="pointer-events-none absolute left-0 top-[-12%] h-[124%] w-full max-w-none object-cover object-[center_40%] will-change-transform"
-            style={{ transform: "translate3d(0, 0, 0) scale(1.22)" }}
+            className="pointer-events-none absolute left-0 top-[-18%] h-[130%] w-full max-w-none object-cover object-[center_62%] will-change-transform"
+            style={{ transform: "translate3d(0, -40px, 0) scale(1.2)" }}
           />
         </picture>
       </div>
